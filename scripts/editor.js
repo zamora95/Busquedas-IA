@@ -1,37 +1,3 @@
-function goIntro () {
-	var $ = go.GraphObject.make; // for conciseness in defining templates
-
-	var diagram = new go.Diagram("editorDiv");
-
-	diagram.initialContentAlignment = go.Spot.Center;
-
-	// define a simple node template
-	diagram.nodeTemplate =
-		$(go.Node, go.Panel.Auto,
-			$(go.Shape,
-				{ figure: "Ellipse" },
-				new go.Binding("fill", "color")),
-			$(go.TextBlock,
-				{ margin: 3 },
-				new go.Binding("text", "key")));
-	
-	var nodeDataArray = [
-		{ key: "A", color: "White" },
-		{ key: "B", color: "White" },
-		{ key: "C", color: "White" },
-		{ key: "E", color: "White" },
-		{ key: "D", color: "White" }
-	];
-	var linkDataArray = [
-		{ from: "A", to: "B"},
-		{ from: "A", to: "C"},
-		{ from: "B", to: "A"},
-		{ from: "C", to: "D"},
-		{ from: "D", to: "A"},
-	];
-	diagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
-}
-
 function init() {
     if (window.goSamples) goSamples();  // init for these samples -- you don't need to call this
     var $ = go.GraphObject.make;  // for conciseness in defining templates
@@ -51,7 +17,7 @@ function init() {
 
     // when the document is modified, add a "*" to the title and enable the "Save" button
     myDiagram.addDiagramListener("Modified", function(e) {
-      var button = document.getElementById("SaveButton");
+      var button = document.getElementById("saveButton");
       if (button) button.disabled = !myDiagram.isModified;
       var idx = document.title.indexOf("*");
       if (myDiagram.isModified) {
@@ -190,3 +156,41 @@ function save() {
 function load() {
     myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
 }
+
+function loadData(){
+
+  var data = document.getElementById("mySavedModel").value;
+  var dataJson = JSON.parse(data);
+
+  var nodes = [];
+
+  for (var i = 0; i < dataJson.nodeDataArray.length; i++) {
+    var nodeInfo = {};
+    nodeInfo.identifier = dataJson.nodeDataArray[i].id;
+    nodeInfo.text = dataJson.nodeDataArray[i].text;
+
+    nodes.push(nodeInfo);
+  }
+  var commentNodes = "";
+  for (var i = 0; i < nodes.length; i++) {
+    commentNodes = commentNodes + (nodes[i].text + " - ID: " + nodes[i].identifier + " ||");
+    document.getElementById('nodes').innerHTML = commentNodes;
+  }
+
+  var transitions = [];
+
+  for (var i = 0; i < dataJson.linkDataArray.length; i++) {
+    var nodeTransition = {};
+    nodeTransition.from = dataJson.linkDataArray[i].from;
+    nodeTransition.to = dataJson.linkDataArray[i].to;
+    transitions.push(nodeTransition);
+  }
+  var commentTransitions = "";
+  for (var i = 0; i < transitions.length; i++) {
+    commentTransitions = commentTransitions + ("From: " + transitions[i].from + " to " + transitions[i].to + " || ");
+    document.getElementById('transitions').innerHTML = commentTransitions;
+  }
+}
+
+//name, condition, value
+//from, to, value
