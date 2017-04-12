@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8">
+	<title>Búsquedas</title>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.7/go.js"></script>
+	<script type="text/javascript" src="scripts/editor.js"></script>
+</head>
+<body onload="init()">
+	<div id="editorDiv" style="border: solid 1px blue; width:600px; height:400px">
+		
+	</div>
+	<div>
+    	<div>
+	    	<button id="SaveButton" onclick="save()">Save</button>
+	      	<button onclick="load()">Load</button>
+      		Diagram Model saved in JSON format:
+    	</div>
+    	<textarea id="mySavedModel" style="width:100%;height:300px">
+{ "nodeKeyProperty": "id",
+	"nodeDataArray": [
+		{ "id": 0, "loc": "120 120", "text": "Initial" },
+		{ "id": 1, "loc": "330 120", "text": "Final" }
+	],
+	"linkDataArray": [
+		{ "from": 0, "to": 1, "text": "Solution", "curviness": 20 }
+	]
+}
+    	</textarea>
+  	</div>
+</body>
+</html>
