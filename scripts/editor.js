@@ -157,12 +157,18 @@ function load() {
     myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
 }
 
+
+var nodes = [];
+var transitions = [];
+
 function loadData(){
+  nodes = [];
+  transitions = [];
 
   var data = document.getElementById("mySavedModel").value;
   var dataJson = JSON.parse(data);
 
-  var nodes = [];
+  
 
   for (var i = 0; i < dataJson.nodeDataArray.length; i++) {
     var nodeInfo = {};
@@ -177,7 +183,7 @@ function loadData(){
     document.getElementById('nodes').innerHTML = commentNodes;
   }
 
-  var transitions = [];
+
 
   for (var i = 0; i < dataJson.linkDataArray.length; i++) {
     var nodeTransition = {};
@@ -187,9 +193,24 @@ function loadData(){
   }
   var commentTransitions = "";
   for (var i = 0; i < transitions.length; i++) {
-    commentTransitions = commentTransitions + ("From: " + transitions[i].from + " to " + transitions[i].to + " || ");
+
+    var fromNodeText = searchNodeText(transitions[i].from);
+    var toNodeText = searchNodeText(transitions[i].to);
+    
+    commentTransitions = commentTransitions + ("From: " + fromNodeText + " to " + toNodeText + " || ");
     document.getElementById('transitions').innerHTML = commentTransitions;
   }
+}
+
+
+function searchNodeText (id) {
+    for (var i = 0; i < nodes.length; i++) {
+      console.log(nodes[i].identifier + "->" + id);
+        if (nodes[i].identifier == id){
+            return nodes[i].text;
+        }
+    }
+    return null;
 }
 
 //name, condition, value
