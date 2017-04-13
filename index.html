@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Evaluación de Algoritmos de Búsquedas</title>
+</head>
+<body>
+	<h1>Creación del grafo</h1>
+	<h3>Opciones de creación</h3>
+	<form>
+		<select name="metodo" id="metodo" onchange="validarSelect(this.value)" >
+	        <option selected="" value="">Seleccione un método de creación..</option>
+	        <option value="manual">Manual</option>
+	        <option value="auto">Automático</option>
+		</select>
+
+		<select name="cantidad" id="cantidad" disabled="true" >
+	        <option selected="" value="">Cantidad de nodos..</option>
+	        <option value="0">Entre 1 y 10 nodos</option>
+	        <option value="1">Entre 11 y 100 nodos</option>
+	        <option value="2">Entre 10.000 y 1.000.000</option>
+	        <option value="3">Más de 1.000.000</option>
+		</select>
+
+		<input type="submit" value="Crear">
+	</form>
+
+	<footer>
+		<script type="text/javascript" src="scripts/editor.js"></script>
+	</footer>
+</body>
+</html>

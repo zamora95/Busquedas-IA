@@ -26,9 +26,32 @@
 	    	<button id="saveButton" onclick="save()">Save</button>
 	      	<button onclick="load()">Load</button>
 	      	<button onclick="loadData()">DFS</button>
-      		Diagram Model saved in JSON format:
+	      	<form>
+		      	<select id="algoritmosBusqueda" name="algoritmosBusqueda">
+	      			<option value="0">Seleccione un método de búsqueda</option>
+	      			<optgroup label="Búsquedas sin información">
+			          	<option value="1">Depth-First Search (DFS)</option>
+			          	<option value="2">Depth-Limited Search (DLS)</option>
+			          	<option value="3">Iterative Deepening Search (IDS)</option>
+			          	<option value="4">Breadth-First Search (BFS)</option>
+			          	<option value="5">Bidirectional Search</option>
+			          	<option value="6">Uniform Cost Search</option>
+	      			</optgroup>
+	      			<optgroup label="Búsquedas con información">
+			          	<option value="7">Best-First Search (BEST-FS)</option>
+			          	<option value="8">A* Search</option>
+			          	<option value="9">Hill Climbing Search</option>
+			          	<option value="10">Simulated Annealing (SA)</option>
+			          	<option value="11">Tabu Search</option>
+	      			</optgroup>
+	    		</select>
+	    		<input type="submit" value="Ver árbol de búsqueda">
+    		</form>
     	</div>
-    	<textarea id="mySavedModel" style="width:100%;height:300px">
+    	<div>
+    		<label>Diagram Model saved in JSON format:</label>
+    	
+    		<textarea id="mySavedModel" style="width:100%;height:300px">
 { "nodeKeyProperty": "id",
 "nodeDataArray": [
 { "id": 0, "loc": "120 120", "text": "Initial" },
@@ -38,7 +61,8 @@
 { "from": 0, "to": 1, "text": "Solution", "curviness": 20 }
 ]
 }
-    	</textarea>
+    		</textarea>
+    	</div>
   	</div>
   	<footer>
   		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

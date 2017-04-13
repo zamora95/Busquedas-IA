@@ -213,5 +213,14 @@ function searchNodeText (id) {
     return null;
 }
 
+
+function validarSelect (value) {
+    
+    if (value != "auto")
+        document.getElementById("cantidad").disabled = true;
+    else
+        document.getElementById("cantidad").disabled = false;
+}
+
 //name, condition, value
 //from, to, value
