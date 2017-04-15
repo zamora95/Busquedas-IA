@@ -3,11 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Evaluación de Algoritmos de Búsquedas</title>
+	<script type="text/javascript" src="scripts/editor.js"></script>
+	<script type="text/javascript" src="scripts/editorAuto.js"></script>
 </head>
 <body>
 	<h1>Creación del grafo</h1>
 	<h3>Opciones de creación</h3>
-	<form>
+	<form method="POST" action="javascript:createGraph(this)">
 		<select name="metodo" id="metodo" onchange="validarSelect(this.value)" >
 	        <option selected="" value="">Seleccione un método de creación..</option>
 	        <option value="manual">Manual</option>
@@ -26,7 +28,7 @@
 	</form>
 
 	<footer>
-		<script type="text/javascript" src="scripts/editor.js"></script>
+		
 	</footer>
 </body>
 </html>

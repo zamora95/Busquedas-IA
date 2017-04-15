@@ -32,7 +32,7 @@ function init() {
       $(go.Node, "Auto",
         new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
         // define the node's outer shape, which will surround the TextBlock
-        $(go.Shape, "RoundedRectangle",
+        $(go.Shape, "Circle",
           {
             parameter1: 20,  // the corner has a large radius
             fill: $(go.Brush, "Linear", { 0: "rgb(254, 201, 0)", 1: "rgb(254, 162, 0)" }),
@@ -45,6 +45,7 @@ function init() {
         $(go.TextBlock,
           {
             font: "bold 11pt helvetica, bold arial, sans-serif",
+            margin: 3,
             editable: true  // editing the text automatically updates the model data
           },
           new go.Binding("text").makeTwoWay())
@@ -221,6 +222,37 @@ function validarSelect (value) {
     else
         document.getElementById("cantidad").disabled = false;
 }
+
+
+function createGraph (theForm) {
+    console.log(theForm.metodo.value);
+    console.log(theForm.cantidad.value);
+    if (theForm.metodo.value == "manual") {
+        window.location="busquedas.html";
+    }
+    else if (theForm.metodo.value == "auto") {
+        var n;
+        if (theForm.cantidad.value == 0) {
+            n = Math.floor((Math.random() * 10) + 1);
+        }
+        else if (theForm.cantidad.value == 1) {
+            n = Math.floor((Math.random() * 90) + 10);   
+        }
+        else if (theForm.cantidad.value == 2) {
+            n = Math.floor((Math.random() * 90000) + 10000);
+        }
+        else if (theForm.cantidad.value == 3) {
+            n = Math.floor((Math.random() * 9000000) + 1000000);
+        }
+
+        //createGraphAuto(theForm.cantidad.value);
+        localStorage.setItem("cantidadNodos", n);
+        window.location="busquedas-auto.html";
+    }
+}
+
+
+
 
 //name, condition, value
 //from, to, value
