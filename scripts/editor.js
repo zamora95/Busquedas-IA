@@ -251,7 +251,6 @@ function loadData(){
     var nodeInfo = {};
     nodeInfo.identifier = dataJson.nodeDataArray[i].id;
     nodeInfo.text = dataJson.nodeDataArray[i].text;
-
     nodes.push(nodeInfo);
   }
   var commentNodes = "";
@@ -266,6 +265,7 @@ function loadData(){
     var nodeTransition = {};
     nodeTransition.from = dataJson.linkDataArray[i].from;
     nodeTransition.to = dataJson.linkDataArray[i].to;
+    nodeTransition.visited = dataJson.linkDataArray[i].visited;
     transitions.push(nodeTransition);
   }
   var commentTransitions = "";
@@ -427,7 +427,8 @@ function createGraphAuto () {
             var linkdata = {
                 from: nodoActual.id,
                 to: nodoVecino.id,
-                text: Math.floor((Math.random() * 10) + 1)
+                text: Math.floor((Math.random() * 10) + 1),
+                visited:false
             };
             //linkDataArray.push(linkdata);
             myDiagram.model.addLinkData(linkdata);
@@ -444,8 +445,16 @@ function createGraphAuto () {
 
 
 function createTree (theForm) {
+    loadData();
+    if(theForm.algoritmosBusqueda.value == 1){
+        dfs_Main();
+
+    }
     if (theForm.algoritmosBusqueda.value == 3) {
         ids_main();
+    }
+    if (theForm.algoritmosBusqueda.value == 4) {
+        bfs_Main();
     }
 }
 
