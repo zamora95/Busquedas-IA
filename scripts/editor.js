@@ -251,6 +251,7 @@ function loadData(){
     var nodeInfo = {};
     nodeInfo.identifier = dataJson.nodeDataArray[i].id;
     nodeInfo.text = dataJson.nodeDataArray[i].text;
+    nodeInfo.cost = 0;
     nodes.push(nodeInfo);
   }
   var commentNodes = "";
@@ -266,6 +267,7 @@ function loadData(){
     nodeTransition.from = dataJson.linkDataArray[i].from;
     nodeTransition.to = dataJson.linkDataArray[i].to;
     nodeTransition.visited = dataJson.linkDataArray[i].visited;
+    nodeTransition.weight = parseInt(dataJson.linkDataArray[i].text);
     transitions.push(nodeTransition);
   }
   var commentTransitions = "";
@@ -448,13 +450,15 @@ function createTree (theForm) {
     loadData();
     if(theForm.algoritmosBusqueda.value == 1){
         dfs_Main();
-
     }
-    if (theForm.algoritmosBusqueda.value == 3) {
+    else if (theForm.algoritmosBusqueda.value == 3) {
         ids_main();
     }
-    if (theForm.algoritmosBusqueda.value == 4) {
+    else if (theForm.algoritmosBusqueda.value == 4) {
         bfs_Main();
+    }
+    else if (theForm.algoritmosBusqueda.value == 6) {
+        ucs_main();
     }
 }
 
