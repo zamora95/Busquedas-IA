@@ -34,8 +34,9 @@ function init() {
         // define the node's outer shape, which will surround the TextBlock
         $(go.Shape, "Circle",
           {
+            name: "SHAPE",
             parameter1: 20,  // the corner has a large radius
-            fill: $(go.Brush, "Linear", { 0: "rgb(254, 201, 0)", 1: "rgb(254, 162, 0)" }),
+            fill: "LightBlue",
             stroke: null,
             portId: "",  // this Shape is the Node's port, not the whole Node
             fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
@@ -59,13 +60,29 @@ function init() {
           $(go.Placeholder)  // a Placeholder sizes itself to the selected Node
         ),
         // the button to create a "next" node, at the top-right corner
-        $("Button",
-          {
-            alignment: go.Spot.TopRight,
-            click: addNodeAndLink  // this function is defined below
-          },
-          $(go.Shape, "PlusLine", { width: 6, height: 6 })
-        ) // end button
+        $(go.Panel, "Vertical",
+          { alignment: go.Spot.TopRight, alignmentFocus: go.Spot.Top },
+          $("Button",
+            {
+              click: addNodeAndLink  // this function is defined below
+            },
+            $(go.Shape, "PlusLine", { width: 6, height: 6 })
+          ), // end button
+          $("Button", 
+            {
+              click: setInitialNode
+            },
+            $(go.TextBlock, "i",
+              { font: "bold 10pt sans-serif", textAlign: "center" })
+          ),
+          $("Button", 
+            {
+              click: setFinalNode
+            },
+            $(go.TextBlock, "f",
+              { font: "bold 10pt sans-serif", textAlign: "center" })
+          )
+        )
       ); // end Adornment
 
     // clicking the button inserts a new node to the right of the selected node,
@@ -109,6 +126,65 @@ function init() {
 
       // if the new node is off-screen, scroll the diagram to show the new node
       diagram.scrollToRect(newnode.actualBounds);
+    }
+
+    function setInitialNode(e, button) {
+      var node = button.part.adornedPart;
+      var diagram = node.diagram;
+      var model = diagram.model;
+
+      var llavenodo = model.getKeyForNodeData(node.data);
+      console.log("Esta es la llave: " + llavenodo);
+      var data = myDiagram.model.findNodeDataForKey(llavenodo);
+
+      if (data !== null) {
+        if (data.initial == "false" || data.initial == null) {
+          myDiagram.model.setDataProperty(data, "initial", "true");      
+          var shape = node.findObject("SHAPE");
+          if (shape === null) return;
+          node.diagram.startTransaction("Change color");
+          shape.fill = "red";
+          node.diagram.commitTransaction("Change color");
+        }
+
+        else if (data.initial == "true") {
+          myDiagram.model.setDataProperty(data, "initial", "false");      
+          var shape = node.findObject("SHAPE");
+          if (shape === null) return;
+          node.diagram.startTransaction("Change color");
+          shape.fill = "LightBlue";
+          node.diagram.commitTransaction("Change color");
+        }
+      }
+    }
+
+    function setFinalNode(e, button) {
+      var node = button.part.adornedPart;
+      var diagram = node.diagram;
+      var model = diagram.model;
+
+      var llavenodo = model.getKeyForNodeData(node.data);
+      console.log("Esta es la llave: " + llavenodo);
+      var data = myDiagram.model.findNodeDataForKey(llavenodo);
+
+      if (data !== null) {
+        if (data.final == "false" || data.final == null) {
+          myDiagram.model.setDataProperty(data, "final", "true");
+          var shape = node.findObject("SHAPE");
+          if (shape === null) return;
+          node.diagram.startTransaction("Change color");
+          shape.fill = "green";
+          node.diagram.commitTransaction("Change color");
+        }
+        else if (data.final == "true") {
+          myDiagram.model.setDataProperty(data, "final", "false");
+          var shape = node.findObject("SHAPE");
+          if (shape === null) return;
+          node.diagram.startTransaction("Change color");
+          shape.fill = "LightBlue";
+          node.diagram.commitTransaction("Change color");
+        }
+      }
     }
 
     // replace the default Link template in the linkTemplateMap
@@ -201,12 +277,13 @@ function loadData(){
     commentTransitions = commentTransitions + ("From: " + fromNodeText + " to " + toNodeText + " || ");
     document.getElementById('transitions').innerHTML = commentTransitions;
   }
+
 }
 
 
 function searchNodeText (id) {
     for (var i = 0; i < nodes.length; i++) {
-      console.log(nodes[i].identifier + "->" + id);
+      //console.log(nodes[i].identifier + "->" + id);
         if (nodes[i].identifier == id){
             return nodes[i].text;
         }
@@ -225,10 +302,27 @@ function validarSelect (value) {
 
 
 function createGraph (theForm) {
+
+    var originalModel = "{ \"nodeKeyProperty\": \"id\", \n\t\"nodeDataArray\": [], \n\t\"linkDataArray\": [] \n}";
+
+    document.getElementById("mySavedModel").innerHTML = originalModel;
+
+    try {
+        myDiagram.clear();
+    }
+    catch (err) {
+        console.log(err.message);
+    }
+
     console.log(theForm.metodo.value);
     console.log(theForm.cantidad.value);
     if (theForm.metodo.value == "manual") {
-        window.location="busquedas.html";
+        try {
+          init();  
+        }
+        catch (err) {
+          console.log(err.message);
+        }
     }
     else if (theForm.metodo.value == "auto") {
         var n;
@@ -247,12 +341,113 @@ function createGraph (theForm) {
 
         //createGraphAuto(theForm.cantidad.value);
         localStorage.setItem("cantidadNodos", n);
-        window.location="busquedas-auto.html";
+        try {
+          init();  
+        }
+        catch (err) {
+          console.log(err.message);
+        }
+        createGraphAuto();
     }
 }
 
 
+function createGraphAuto () {
 
+    //init();
+    var cantidad = localStorage.getItem("cantidadNodos");
+    //console.log(cantidad);
+
+    var nodeDataArray = [];
+    var linkDataArray = [];
+
+    var letra1 = "";
+    var letra2 = "";
+    var letra3 = "";
+    var letra4 = "";
+    var letra5 = "";
+
+    n = 0;
+
+    for (var h = -1; h < 26; h++) {
+        for (var i = -1; i < 26; i++) {
+            for (var j = -1; j < 26; j++) {
+                for (var k = -1; k < 26; k++) {
+                    for (var l = 0; l < 26; l++) {
+                        letra1 = String.fromCharCode(l + 65);
+                        if (k >= 0)
+                            letra2 = String.fromCharCode(k + 65);
+                        if (j >= 0)
+                            letra3 = String.fromCharCode(j + 65);
+                        if (i >= 0)
+                            letra4 = String.fromCharCode(i + 65);
+                        if (h >= 0)
+                            letra5 = String.fromCharCode(h + 65);
+                        var nombre = letra5 + letra4 + letra3 + letra2 + letra1;
+
+                        var nodeId = nodeDataArray.length;
+                        var toData = { text: nombre };
+                        //console.log(toData.text);
+                        //nodeDataArray.push(toData);
+                        myDiagram.model.addNodeData(toData);
+
+                        n++;
+                        if (n >= cantidad)
+                            break;
+                    }
+                    if (n >= cantidad)
+                        break;
+                }
+                if (n >= cantidad)
+                    break;
+            }
+            if (n >= cantidad)
+                break;
+        }
+        if (n >= cantidad)
+            break;
+    };
+
+    //console.log("Antes de entrar al for");
+    for (var i = 0; i < myDiagram.model.nodeDataArray.length; i++) {
+        var nodoActual = myDiagram.model.nodeDataArray[i];
+        var demasNodos = myDiagram.model.nodeDataArray.slice();
+        demasNodos.splice(i, 1);
+
+        var arcos = Math.floor(Math.random() * cantidad);
+        //console.log("Cantidad de arcos del nodo " + nodoActual.id + ": " + arcos);
+        for (var j = 0; j < arcos; j++) {
+            
+            var posicion = Math.floor((Math.random() * demasNodos.length));
+            var nodoVecino = demasNodos[posicion];
+
+            //console.log("From:" + nodoActual.id);
+            //console.log("-To-:" + nodoVecino.id);
+
+            var linkdata = {
+                from: nodoActual.id,
+                to: nodoVecino.id,
+                text: Math.floor((Math.random() * 10) + 1)
+            };
+            //linkDataArray.push(linkdata);
+            myDiagram.model.addLinkData(linkdata);
+
+            demasNodos.splice(posicion, 1);
+        }
+    }
+
+    save();
+        
+    //myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+    //initAuto();
+}
+
+
+function createTree (theForm) {
+    if (theForm.algoritmosBusqueda.value == 3) {
+        ids_main();
+    }
+}
 
 //name, condition, value
 //from, to, value
