@@ -288,7 +288,7 @@ function hill_climbing(root, goal) {
 	var currentEvaluation;
 	var nextEvaluation;
 	var localOptimum;
-	var isBetter;
+	var isBetter = false;
 
 	var s_p = new Array();
 
@@ -316,6 +316,7 @@ function hill_climbing(root, goal) {
 				}
 			}
 			if (isBetter) {
+				console.log(localOptimum.text + "es mejor=" + isBetter + " que " + node.text);
 				s_p.push(localOptimum);
 				console.log("Entró " + localOptimum.text);
 				isBetter = false;
