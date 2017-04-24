@@ -254,11 +254,11 @@ function loadData(){
     nodeInfo.cost = 0;
     nodes.push(nodeInfo);
   }
-  var commentNodes = "";
+  /*var commentNodes = "";
   for (var i = 0; i < nodes.length; i++) {
     commentNodes = commentNodes + (nodes[i].text + " - ID: " + nodes[i].identifier + " ||");
     document.getElementById('nodes').innerHTML = commentNodes;
-  }
+  }*/
 
 
 
@@ -270,7 +270,7 @@ function loadData(){
     nodeTransition.weight = parseInt(dataJson.linkDataArray[i].text);
     transitions.push(nodeTransition);
   }
-  var commentTransitions = "";
+  /*var commentTransitions = "";
   for (var i = 0; i < transitions.length; i++) {
 
     var fromNodeText = searchNodeText(transitions[i].from);
@@ -278,7 +278,7 @@ function loadData(){
     
     commentTransitions = commentTransitions + ("From: " + fromNodeText + " to " + toNodeText + " || ");
     document.getElementById('transitions').innerHTML = commentTransitions;
-  }
+  }*/
 
 }
 
@@ -462,6 +462,13 @@ function createTree (theForm) {
     }
     else if (theForm.algoritmosBusqueda.value == 9) {
         hill_climbing_main();
+    }
+    try {
+        initTree();
+    }
+    catch (err) {
+        console.log(err.message);
+        loadTree();
     }
 }
 
