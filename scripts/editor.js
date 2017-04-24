@@ -266,7 +266,7 @@ function loadData(){
     var nodeTransition = {};
     nodeTransition.from = dataJson.linkDataArray[i].from;
     nodeTransition.to = dataJson.linkDataArray[i].to;
-    nodeTransition.visited = dataJson.linkDataArray[i].visited;
+    nodeTransition.visited = false;
     nodeTransition.weight = parseInt(dataJson.linkDataArray[i].text);
     transitions.push(nodeTransition);
   }
@@ -429,7 +429,7 @@ function createGraphAuto () {
             var linkdata = {
                 from: nodoActual.id,
                 to: nodoVecino.id,
-                text: Math.floor((Math.random() * 10) + 1),
+                text: Math.floor((Math.random() * 20) + 1),
                 visited:false
             };
             //linkDataArray.push(linkdata);
@@ -459,6 +459,9 @@ function createTree (theForm) {
     }
     else if (theForm.algoritmosBusqueda.value == 6) {
         ucs_main();
+    }
+    else if (theForm.algoritmosBusqueda.value == 9) {
+        hill_climbing_main();
     }
 }
 

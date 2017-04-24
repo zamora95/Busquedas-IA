@@ -32,18 +32,16 @@ function getNodosAdyacentes(node) {
 
 
 function getNodosAdyacentes_js(node) {
-  nodosAdyacentes = [];
-  for (var i = 0; i < transitions.length; i++) {
-    if(transitions[i].visited != true){
-       if (transitions[i].from == node.identifier) {
-        transitions[i].visited = true;
-        var adyacente = getNodobyId(transitions[i].to);
-        nodosAdyacentes.push(adyacente);   
-      }
-
-    }
-   
-  }
+  	nodosAdyacentes = [];
+  	for (var i = 0; i < transitions.length; i++) {
+    	if(transitions[i].visited != true){
+    		if (transitions[i].from == node.identifier) {
+        		transitions[i].visited = true;
+        		var adyacente = getNodobyId(transitions[i].to);
+        		nodosAdyacentes.push(adyacente);   
+      		}
+    	}
+  	}
 }
 
 
@@ -237,7 +235,7 @@ function ucs(root, goal) {
 			console.log("Costo: " + cost);
 			return;
 		}
-		getNodosAdyacentes(node);
+		getNodosAdyacentes_js(node);
 		for (to = nodosAdyacentes.length - 1; to >= 0; to--) {
 			var arco = getArco(node, nodosAdyacentes[to]);
 			child_cost = arco.weight;
@@ -253,5 +251,80 @@ function ucs_main() {
 	console.log(nodes[0].text + " es el nodo inicial");
 	console.log(nodes[nodes.length - 1].text + " es el nodo final")
 	ucs(nodes[0], nodes[nodes.length - 1]);
+	return;
+}
+
+
+/*
+	Heuristic
+	current: current state
+	goal: final state
+	Return an estimate cost depending on the distante between current state and final state position in the nodes list
+*/
+function heuristic(current, goal){
+	var indexCurrent;
+	var indexGoal;
+	for(var i = 0; i < nodes.length; i++) {
+		if (nodes[i].identifier == current.identifier) {
+			indexCurrent = i;
+		}
+		if (nodes[i].identifier == goal.identifier) {
+			indexGoal = i;
+		}
+	}
+	var indexDistance = Math.abs(indexGoal - indexCurrent);
+	var aproximateToGoal = Math.ceil(indexDistance / 2) * 10;
+	return aproximateToGoal;
+}
+
+
+/*
+	Hill Climbing Algorithm
+	root: initial state
+	goal: final state
+*/
+function hill_climbing(root, goal) {
+	var node;
+	var to;
+	var currentEvaluation;
+	var nextEvaluation;
+	var localOptimum;
+
+	var s_p = new Array();
+
+	s_p.push(root);
+	currentEvaluation = heuristic(root, goal);
+	console.log("Entró " + root.text);
+
+	while(s_p.length > 0) {
+		node = s_p.pop();
+
+		if (node.identifier == goal.identifier) 
+			return 1;
+		
+		getNodosAdyacentes(node);
+		
+		if (nodosAdyacentes.length > 0) {
+			for (to = nodosAdyacentes.length - 1; to >= 0; to--) {
+				nextEvaluation = heuristic(nodosAdyacentes[to], goal);
+				console.log("La estimación de " + nodosAdyacentes[to].text + " a " + goal.text + " es " + nextEvaluation);
+				if (nextEvaluation < currentEvaluation) {
+					currentEvaluation = nextEvaluation;
+					localOptimum = nodosAdyacentes[to];
+				}
+			}
+			s_p.push(localOptimum);
+			console.log("Entró " + localOptimum.text);
+		}
+	}
+	return 0;
+}
+
+function hill_climbing_main() {
+	console.log(nodes[0].text + " es el nodo inicial");
+	console.log(nodes[nodes.length - 1].text + " es el nodo final")
+	var status = hill_climbing(nodes[0], nodes[nodes.length - 1]);
+	if (status == 0)
+		console.log("No encontró solución");
 	return;
 }
