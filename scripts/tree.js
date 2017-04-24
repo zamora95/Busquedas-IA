@@ -13,12 +13,16 @@ function initTree() {
         $(go.Node, "Spot",
             { locationSpot: go.Spot.Center },
             new go.Binding("text", "text"),  // for sorting
-            $(go.Shape, "Ellipse",
+            $(go.Shape, "Circle",
                 { fill: "lightblue",  // the initial value, but data binding may provide different value
                 stroke: null,
                 desiredSize: new go.Size(30, 30) }),
-            $(go.TextBlock,
-                new go.Binding("text", "text"))
+            $(go.TextBlock, 
+            {
+                font: "bold 11pt helvetica, bold arial, sans-serif",
+                margin: 3
+            },
+            new go.Binding("text", "text"))
         );
     // define the Link template
     treeDiagram.linkTemplate =
@@ -33,7 +37,7 @@ function initTree() {
     angle = parseFloat(angle, 10);
     lay.angle = angle;
 
-    loadTree();
+    //loadTree();
 }
   
 // Update the layout from the controls, and then perform the layout again
@@ -54,26 +58,26 @@ function loadTree() {
 
     var arbolGenerado = "{ \"class\": \"go.TreeModel\"," +
   "\"nodeDataArray\": [ " +
-"{\"key\":5, \"text\":\"5\"}," +
-"{\"key\":15, \"text\":\"15\", \"parent\":5}," +
-"{\"key\":4, \"text\":\"4\", \"parent\":5}," +
-"{\"key\":7, \"text\":\"7\", \"parent\":5}," +
-"{\"key\":0, \"text\":\"0\", \"parent\":15}," +
-"{\"key\":17, \"text\":\"17\", \"parent\":4}," +
-"{\"key\":13, \"text\":\"13\", \"parent\":4}," +
-"{\"key\":2, \"text\":\"2\", \"parent\":7}," +
-"{\"key\":14, \"text\":\"14\", \"parent\":7}," +
-"{\"key\":3, \"text\":\"3\", \"parent\":0}," +
-"{\"key\":1, \"text\":\"1\", \"parent\":0}," +
-"{\"key\":12, \"text\":\"12\", \"parent\":0}," +
-"{\"key\":10, \"text\":\"10\", \"parent\":17}," +
-"{\"key\":18, \"text\":\"18\", \"parent\":13}," +
-"{\"key\":6, \"text\":\"6\", \"parent\":2}," +
-"{\"key\":8, \"text\":\"8\", \"parent\":2}," +
-"{\"key\":19, \"text\":\"19\", \"parent\":2}," +
-"{\"key\":9, \"text\":\"9\", \"parent\":14}," +
-"{\"key\":16, \"text\":\"16\", \"parent\":14}," +
-"{\"key\":11, \"text\":\"11\", \"parent\":3}" +
+"{\"key\":5, \"text\":\"A\"}," +
+"{\"key\":15, \"text\":\"B\", \"parent\":5}," +
+"{\"key\":4, \"text\":\"C\", \"parent\":5}," +
+"{\"key\":7, \"text\":\"D\", \"parent\":5}," +
+"{\"key\":0, \"text\":\"E\", \"parent\":15}," +
+"{\"key\":17, \"text\":\"F\", \"parent\":4}," +
+"{\"key\":13, \"text\":\"G\", \"parent\":4}," +
+"{\"key\":2, \"text\":\"H\", \"parent\":7}," +
+"{\"key\":14, \"text\":\"I\", \"parent\":7}," +
+"{\"key\":3, \"text\":\"J\", \"parent\":0}," +
+"{\"key\":1, \"text\":\"K\", \"parent\":0}," +
+"{\"key\":12, \"text\":\"L\", \"parent\":0}," +
+"{\"key\":10, \"text\":\"M\", \"parent\":17}," +
+"{\"key\":18, \"text\":\"N\", \"parent\":13}," +
+"{\"key\":6, \"text\":\"O\", \"parent\":2}," +
+"{\"key\":8, \"text\":\"P\", \"parent\":2}," +
+"{\"key\":19, \"text\":\"Q\", \"parent\":2}," +
+"{\"key\":9, \"text\":\"R\", \"parent\":14}," +
+"{\"key\":16, \"text\":\"S\", \"parent\":14}," +
+"{\"key\":11, \"text\":\"T\", \"parent\":3}" +
 " ]}";
 
     treeDiagram.model = go.Model.fromJson(arbolGenerado);

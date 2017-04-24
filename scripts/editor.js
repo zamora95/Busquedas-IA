@@ -319,12 +319,7 @@ function createGraph (theForm) {
     console.log(theForm.metodo.value);
     console.log(theForm.cantidad.value);
     if (theForm.metodo.value == "manual") {
-        try {
-          init();  
-        }
-        catch (err) {
-          console.log(err.message);
-        }
+        
     }
     else if (theForm.metodo.value == "auto") {
         var n;
@@ -343,12 +338,7 @@ function createGraph (theForm) {
 
         //createGraphAuto(theForm.cantidad.value);
         localStorage.setItem("cantidadNodos", n);
-        try {
-          init();  
-        }
-        catch (err) {
-          console.log(err.message);
-        }
+        
         createGraphAuto();
     }
 }
@@ -463,13 +453,9 @@ function createTree (theForm) {
     else if (theForm.algoritmosBusqueda.value == 9) {
         hill_climbing_main();
     }
-    try {
-        initTree();
-    }
-    catch (err) {
-        console.log(err.message);
-        loadTree();
-    }
+    
+    loadTree();
+    
 }
 
 //name, condition, value

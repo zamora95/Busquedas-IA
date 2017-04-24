@@ -2,17 +2,18 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Búsquedas</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
-<body>
+<body onload="init(); initTree();">
 	<h3>Opciones de creación</h3>
-	<form method="POST" action="javascript:createGraph(this)">
-		<select name="metodo" id="metodo" onchange="validarSelect(this.value)" >
+	<form method="POST" action="javascript:createGraph(this)" class="form-inline">
+		<select name="metodo" id="metodo" onchange="validarSelect(this.value)" class="form-control">
 	        <option selected="" value="">Seleccione un método de creación..</option>
 	        <option value="manual">Manual</option>
 	        <option value="auto">Automático</option>
 		</select>
 
-		<select name="cantidad" id="cantidad" disabled="true" >
+		<select name="cantidad" id="cantidad" disabled="true" class="form-control">
 	        <option selected="" value="">Cantidad de nodos..</option>
 	        <option value="0">Entre 1 y 10 nodos</option>
 	        <option value="1">Entre 11 y 100 nodos</option>
@@ -20,8 +21,9 @@
 	        <option value="3">Más de 1.000.000</option>
 		</select>
 
-		<input type="submit" value="Crear">
+		<input type="submit" value="Crear" class="btn btn-primary">
 	</form>
+	
 
 	<table style="width: 100%">
 		<tr>
@@ -42,11 +44,8 @@
 	</table>
 	<div>
     	<div>
-	    	<button id="saveButton" onclick="save()">Save</button>
-	      	<button onclick="load()">Load</button>
-	      	<button onclick="loadData()">DFS</button>
-	      	<form method="POST" action="javascript:createTree(this)">
-		      	<select id="algoritmosBusqueda" name="algoritmosBusqueda">
+	      	<form method="POST" action="javascript:createTree(this)" class="form-inline">
+		      	<select id="algoritmosBusqueda" name="algoritmosBusqueda" class="form-control">
 	      			<option value="0">Seleccione un método de búsqueda</option>
 	      			<optgroup label="Búsquedas sin información">
 			          	<option value="1">Depth-First Search (DFS)</option>
@@ -64,8 +63,11 @@
 			          	<option value="11">Tabu Search</option>
 	      			</optgroup>
 	    		</select>
-	    		<input type="submit" value="Ver árbol de búsqueda">
+	    		<input type="submit" value="Ver árbol de búsqueda" class="btn btn-primary">
     		</form>
+    		<button id="saveButton" onclick="save()" class="btn btn-primary">Generar JSON</button>
+	      	<button onclick="load()" class="btn btn-primary">Cargar JSON</button>
+	      	<!--<button onclick="loadData()">DFS</button>-->
     	</div>
     	<div>
     		<label>Diagram Model saved in JSON format:</label>
@@ -79,12 +81,13 @@
     	</div>
   	</div>
   	<footer>
-  		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.7/go.js"></script>
 		<script type="text/javascript" src="scripts/algorithms.js"></script>
 		<script type="text/javascript" src="scripts/tree.js"></script>
 		<script type="text/javascript" src="scripts/editor.js"></script>
 		<script type="text/javascript" src="scripts/editorAuto.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	</footer>
 </body>
 </html>

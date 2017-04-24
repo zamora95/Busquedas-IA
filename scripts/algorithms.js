@@ -285,10 +285,10 @@ function heuristic(current, goal){
 */
 function hill_climbing(root, goal) {
 	var node;
-	var to;
 	var currentEvaluation;
 	var nextEvaluation;
 	var localOptimum;
+	var isBetter;
 
 	var s_p = new Array();
 
@@ -305,16 +305,21 @@ function hill_climbing(root, goal) {
 		getNodosAdyacentes(node);
 		
 		if (nodosAdyacentes.length > 0) {
-			for (to = nodosAdyacentes.length - 1; to >= 0; to--) {
+			for (var to = nodosAdyacentes.length - 1; to >= 0; to--) {
 				nextEvaluation = heuristic(nodosAdyacentes[to], goal);
 				console.log("La estimación de " + nodosAdyacentes[to].text + " a " + goal.text + " es " + nextEvaluation);
 				if (nextEvaluation < currentEvaluation) {
 					currentEvaluation = nextEvaluation;
 					localOptimum = nodosAdyacentes[to];
+					isBetter = true;
+
 				}
 			}
-			s_p.push(localOptimum);
-			console.log("Entró " + localOptimum.text);
+			if (isBetter) {
+				s_p.push(localOptimum);
+				console.log("Entró " + localOptimum.text);
+				isBetter = false;
+			}
 		}
 	}
 	return 0;
