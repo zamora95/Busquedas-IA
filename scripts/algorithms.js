@@ -16,6 +16,31 @@ function getArco(from, to) {
 	}
 }
 
+
+/*
+getNodosAdyacentesWithHeuristic
+Method getNodosAdyacentesWithHeuristic(node,goal)
+root:current node
+goal:final state
+*/
+function getNodosAdyacentesWithHeuristic(node,goal) {
+  nodosAdyacentes = [];
+  for (var i = 0; i < transitions.length; i++) {
+    if(transitions[i].visited != true){
+       if (transitions[i].from == node.identifier) {
+        transitions[i].visited = true;
+        var adyacente = getNodobyId(transitions[i].to);
+        adyacente.weight = heuristic(adyacente,goal);
+        nodosAdyacentes.push(adyacente);
+      }
+
+    }
+   
+  }
+
+}
+
+
 function getNodosAdyacentes(node) {
 	nodosAdyacentes = [];
 	var id = node.identifier;
@@ -57,18 +82,15 @@ function dfs(root, goal){
   nodes[0].visited = true;
   while (stack.length > 0){
     var nodeIndex = stack.pop();
-    getNodosAdyacentes_js(nodeIndex);
     console.log(nodeIndex);
+    if (nodosAdyacentes[i] == goal) {
+        return;
+    }
+    getNodosAdyacentes_js(nodeIndex);
+   
     for (var i = 0; i < nodosAdyacentes.length; i++) {
-        if (nodosAdyacentes[i] == goal) {
-          console.log("Expande: " + nodosAdyacentes[i].text);
-          return;
-        }else{
-          console.log("Expande: " + nodosAdyacentes[i].text);
-          stack.push(nodosAdyacentes[i]);
-      
-        } 
-        
+        stack.push(nodosAdyacentes[i]);
+       
     }
 
     
@@ -148,19 +170,18 @@ function bfs(root,goal){
   while (queue.length > 0){
     var nodeIndex = queue.shift();
     console.log(nodeIndex);
+    if (nodeIndex == goal) {
+        return;
+    }
+
     for (var i = 0; i < transitions.length; i++) {
       if(transitions[i].from == nodeIndex.identifier){ 
         if (transitions[i].visited != true){
           var nodeX = getNodobyId(transitions[i].to);
-          if (nodeX == goal) {
-            console.log("Expande: " + nodeX.text);
-            return;
-          }else{
-            transitions[i].visited = true;
-            console.log("Expande: " + nodeX.text);
-            queue.push(nodeX);
-          }
-
+          transitions[i].visited = true;
+          console.log("Expande: " + nodeX.text);
+          queue.push(nodeX);
+       
         }       
             
       }
@@ -172,12 +193,14 @@ function bfs(root,goal){
   }
 
 }
+
 /*
 Main of Breadth-First Search (BFS)
 */
 function bfs_Main(){
 	bfs(nodes[0],nodes[nodes.length-1]);
 }
+
 
 
 /*
@@ -278,6 +301,48 @@ function heuristic(current, goal){
 }
 
 
+
+/*
+Algorithms BEST-FIRST SEARCH (BEST-FS)
+Method parameters(root,goal)
+root:initial state
+goal:final state
+*/
+function bestFS(root, goal){
+  var stack = [root];
+  var nodeMin;
+  var nodeTemp;
+  nodes[0].visited = true;
+
+  while (stack.length > 0){
+    var nodeIndex = stack.pop();
+    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
+    console.log(nodeIndex);
+    if(nodosAdyacentes.length > 0){
+      weightMin = 1000;
+      for (var i = 0; i < nodosAdyacentes.length; i++) {
+        if (nodosAdyacentes[i] == goal) {
+          console.log("Prueba" + nodosAdyacentes[i].text);
+          return;
+        }
+        if (nodosAdyacentes[i].weight < weightMin){
+          weightMin = nodosAdyacentes[i].weight;
+          nodeMin = nodosAdyacentes[i];
+        }
+      }
+      stack.push(nodeMin);
+    }  
+  }
+}
+
+/*
+Main of Breadth-First Search (BFS)
+*/
+function bestFS_Main(){
+	bestFS(nodes[0],nodes[nodes.length-1]);
+}
+
+
 /*
 	Hill Climbing Algorithm
 	root: initial state
@@ -333,4 +398,64 @@ function hill_climbing_main() {
 	if (status == 0)
 		console.log("No encontró solución");
 	return;
+}
+
+
+
+/*
+Algorithms Simulated Annealing(SA)
+Method parameters(root,goal)
+root:initial state
+goal:final state
+*/
+function simulatedAnnealing(root, goal){
+  console.log("ENTRE");
+  var stack = [root];
+  var nodeMin;
+  var nodeTemp;
+  nodes[0].visited = true;
+
+  while (stack.length > 0){
+    var nodeIndex = stack.pop();
+    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
+    console.log(nodeIndex);
+    if(nodosAdyacentes.length > 0){
+      weigMin = 1000;
+      for (var i = 0; i < nodosAdyacentes.length; i++) {
+
+        if (nodosAdyacentes[i] == goal) {
+          console.log("Prueba" + nodosAdyacentes[i].text);
+          return;
+        }
+
+        var randomNeighbour = Math.floor(Math.random() * 10) + 1;
+        console.log(randomNeighbour);
+        if(nodosAdyacentes[i].weight > randomNeighbour){
+          nodeTemp = nodosAdyacentes[i];
+        }
+
+        if (nodeTemp != null) {
+          if (nodeTemp.weight < weigMin){
+
+            weightMin = nodeTemp.weight;
+            nodeMin = nodeTemp;
+            console.log("Prueba" + nodeMin.text);
+          }
+
+        }
+
+    
+      }
+      stack.push(nodeMin);
+    }  
+  }
+
+
+}
+
+/*
+Main of Breadth-First Search (BFS)
+*/
+function simulatedAnnealing_Main(){
+	simulatedAnnealing(nodes[0],nodes[nodes.length-1]);
 }

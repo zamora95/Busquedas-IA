@@ -450,8 +450,14 @@ function createTree (theForm) {
     else if (theForm.algoritmosBusqueda.value == 6) {
         ucs_main();
     }
+    else if (theForm.algoritmosBusqueda.value == 7) {
+        bestFS_Main();
+    }
     else if (theForm.algoritmosBusqueda.value == 9) {
         hill_climbing_main();
+    }
+    else if (theForm.algoritmosBusqueda.value == 10) {
+        simulatedAnnealing_Main();
     }
     
     loadTree();
