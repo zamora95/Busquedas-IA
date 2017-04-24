@@ -83,7 +83,8 @@ function dfs(root, goal){
   while (stack.length > 0){
     var nodeIndex = stack.pop();
     console.log(nodeIndex);
-    if (nodosAdyacentes[i] == goal) {
+    if (nodeIndex == goal) {
+    	
         return;
     }
     getNodosAdyacentes_js(nodeIndex);
