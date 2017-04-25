@@ -420,8 +420,8 @@ function createGraphAuto () {
             var linkdata = {
                 from: nodoActual.id,
                 to: nodoVecino.id,
-                text: Math.floor((Math.random() * 20) + 1),
-                visited:false
+                text: Math.floor((Math.random() * 20) + 1)//,
+                //visited:false
             };
             //linkDataArray.push(linkdata);
             myDiagram.model.addLinkData(linkdata);
@@ -461,7 +461,7 @@ function createTree (theForm) {
         simulatedAnnealing_Main();
     }
     
-    loadTree();
+    //loadTree();
     
 }
 

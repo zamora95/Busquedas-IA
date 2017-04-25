@@ -82,3 +82,36 @@ function loadTree() {
 
     treeDiagram.model = go.Model.fromJson(arbolGenerado);
 }
+
+
+function buildJSONTree() {
+    var parent;
+    var JSONString = "{ \"class\": \"go.TreeModel\",\"nodeDataArray\": [ ";
+    var nodeJSON;
+
+    for (var i = 0; i < nodosSolucion.length; i++) {
+        if (i == 0) {
+            nodeJSON = "{\"key\":" + nodosSolucion[i].identifier + ", \"text\":\"" + nodosSolucion[i].text + "\"},";
+            JSONString += nodeJSON;
+            continue;
+        }
+
+        for (var j = 0; j < arcosSolucion.length; j++) {
+            if (arcosSolucion[j].to == nodosSolucion[i].identifier) {
+                parent = arcosSolucion[j].from;
+                nodeJSON = "{\"key\":" + nodosSolucion[i].identifier + ", \"text\":\"" + nodosSolucion[i].text + "\", \"parent\":" + parent + "}";
+
+                if (i < nodosSolucion.length-1) {
+                    nodeJSON += ",";
+                }
+                JSONString += nodeJSON;
+            }
+        }
+    }
+
+    JSONString += " ]}";
+    console.log(JSONString);
+    treeDiagram.model = go.Model.fromJson(JSONString);
+}
+
+//"{\"key\":15, \"text\":\"B\", \"parent\":5},"

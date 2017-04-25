@@ -1,14 +1,15 @@
 nodosAdyacentes = [];
 
+var nodosSolucion;
+var arcosSolucion;
+
 function getNodobyId(identifier) {
 	for (var i = 0; i < nodes.length; i++) {
 		if (nodes[i].identifier == identifier) {
 			if(nodes[i].visited != true){
 				nodes[i].visited = true;
 				return nodes[i];	
-			}
-
-			
+			}	
 		}
 	}
 	return 1;
@@ -19,6 +20,16 @@ function getArco(from, to) {
 		if ((transitions[i].from == from.identifier) && (transitions[i].to == to.identifier)) {
 			return transitions[i];
 		}
+	}
+}
+
+function desvisitar() {
+	var i;
+	for (i = 0; i < nodes.length; i++) {
+		nodes[i].visited = false;
+	}
+	for (i = 0; i < transitions.length; i++) {
+		transitions[i].visited = false;
 	}
 }
 
@@ -40,13 +51,9 @@ function getNodosAdyacentesWithHeuristic(node,goal) {
     			adyacente.weight = heuristic(adyacente,goal);
 	        	nodosAdyacentes.push(adyacente); 	
     		}
-      
       	}	
-
     }
-   
   }
-
 }
 
 
@@ -58,8 +65,9 @@ function getNodosAdyacentes(node) {
 		if (transitions[i].from == id) {
 			var adyacente = getNodobyId(transitions[i].to);
 			nodosAdyacentes.push(adyacente);
+			arcosSolucion.push(transitions[i]);
 			//console.log(adyacente.text + ", ");
-		};
+		}
 	}
 }
 
@@ -73,9 +81,9 @@ function getNodosAdyacentes_js(node) {
     			var adyacente = getNodobyId(transitions[i].to);	
     			if (adyacente != 1){
     				transitions[i].visited = true;
-	        		nodosAdyacentes.push(adyacente); 	
+	        		nodosAdyacentes.push(adyacente);
+	        		arcosSolucion.push(transitions[i]);
     			}
-    				
       		}
     	}
   	}
@@ -126,6 +134,9 @@ function dfs_Main(){
 	limit: search limit of depth tree
 */
 function ids(root, goal, limit){
+	nodosSolucion = [];
+	arcosSolucion = [];
+
 	var node;
 	var depth;
 	var to;
@@ -135,6 +146,7 @@ function ids(root, goal, limit){
 
 	s_p.push(root);
 	sd_p.push(0);
+	nodosSolucion.push(root);
 
 	while(s_p.length > 0) {
 		node = s_p.pop();
@@ -147,6 +159,7 @@ function ids(root, goal, limit){
 			for (to = nodosAdyacentes.length - 1; to >= 0; to--) {
 				s_p.push(nodosAdyacentes[to]);
 				sd_p.push(depth+1);
+				nodosSolucion.push(nodosAdyacentes[to]);
 			}
 		}
 	}
@@ -158,10 +171,13 @@ function ids_main() {
 	var depth = 1;
 	while(depth < 10) {
 		console.log(nodes[0].text + " es el nodo inicial");
-		console.log(nodes[nodes.length - 1].text + " es el nodo final")
+		console.log(nodes[nodes.length - 1].text + " es el nodo final");
+		desvisitar();
 		status = ids(nodes[0], nodes[nodes.length - 1], depth);
-		if (status == 1)
+		if (status == 1) {
+			buildJSONTree();
 			break;
+		}
 		else
 			depth++;
 	}
@@ -245,6 +261,9 @@ function PQueue() {
 	goal: final state
 */
 function ucs(root, goal) {
+	nodosSolucion = [];
+	arcosSolucion = [];
+
 	var node;
 	var cost;
 	var child_cost;
@@ -254,12 +273,14 @@ function ucs(root, goal) {
 
 	root.cost = 0;
 	q_p.enPQueue(root);
+	nodosSolucion.push(root);
+
 	while(!q_p.isEmptyPQueue()) {
 		node = q_p.dePQueue();
 		cost = node.cost;
 		if (node.identifier == goal.identifier) {
 			console.log("Costo: " + cost);
-			return;
+			return 1;
 		}
 		getNodosAdyacentes_js(node);
 		for (to = nodosAdyacentes.length - 1; to >= 0; to--) {
@@ -267,16 +288,22 @@ function ucs(root, goal) {
 			child_cost = arco.weight;
 			nodosAdyacentes[to].cost = child_cost + cost;
 			q_p.enPQueue(nodosAdyacentes[to]);
+			nodosSolucion.push(nodosAdyacentes[to]);
 			console.log(nodosAdyacentes[to].text + " pesa " + nodosAdyacentes[to].cost);
 		}
 	}
-	return;
+	return 0;
 }
 
 function ucs_main() {
 	console.log(nodes[0].text + " es el nodo inicial");
-	console.log(nodes[nodes.length - 1].text + " es el nodo final")
-	ucs(nodes[0], nodes[nodes.length - 1]);
+	console.log(nodes[nodes.length - 1].text + " es el nodo final");
+	desvisitar();
+	var state = ucs(nodes[0], nodes[nodes.length - 1]);
+	if (state == 1)
+		buildJSONTree();
+	else
+		alert("No se ha encontrado solución");
 	return;
 }
 
@@ -396,7 +423,8 @@ function hill_climbing(root, goal) {
 
 function hill_climbing_main() {
 	console.log(nodes[0].text + " es el nodo inicial");
-	console.log(nodes[nodes.length - 1].text + " es el nodo final")
+	console.log(nodes[nodes.length - 1].text + " es el nodo final");
+	desvisitar();
 	var status = hill_climbing(nodes[0], nodes[nodes.length - 1]);
 	if (status == 0)
 		console.log("No encontró solución");
@@ -457,7 +485,7 @@ function simulatedAnnealing(root, goal){
 }
 
 /*
-Main of Breadth-First Search (BFS)
+Main of Simulated Annealing
 */
 function simulatedAnnealing_Main(){
 	simulatedAnnealing(nodes[0],nodes[nodes.length-1]);
