@@ -490,3 +490,227 @@ Main of Simulated Annealing
 function simulatedAnnealing_Main(){
 	simulatedAnnealing(nodes[0],nodes[nodes.length-1]);
 }
+
+var openedNodes = [];
+var closedNodes = [];
+var visitedNodes = [];
+var arcos = [];
+var size; var limit;
+
+/*Método de Búsqueda Bidireccional
+node: initial state
+objetive: final state
+*/
+function busquedaBidireccional(node, objetive) {
+ 	  if (node == objetive) {
+ 	    controlNodos(node, closedNodes, openedNodes);
+	    //mostrarNodos(openedNodes, 'openedNodes');
+	    //mostrarNodos(closedNodes, 'closedNodes');
+	    return;
+  	}
+  	if (validar(objetive, visitedNodes) == true) {
+  		controlNodos(objetive, closedNodes, openedNodes);
+	    //mostrarNodos(openedNodes, 'openedNodes');
+	    //mostrarNodos(closedNodes, 'closedNodes');
+	    return;
+  	}
+  	else {
+	    controlNodos(recorridoAdelante(node), openedNodes, closedNodes); controlNodos(recorridoAtrás(objetive), openedNodes, closedNodes);
+	    console.log("Abriendo: " + recorridoAdelante(node) + ", " + recorridoAtrás(objetive));
+	    controlNodos(node, closedNodes, openedNodes); controlNodos(objetive, closedNodes, openedNodes);
+	    console.log("Cerrando: " + node + ", " + objetive);
+	    llenarListaNodosBi(node, visitedNodes);
+	    busquedaBidireccional(recorridoAdelante(node), recorridoAtrás(objetive));
+  	}
+  	return;
+}
+
+function dls(){
+	size = nodes.length - 1;
+	busquedaDls(nodes[0].text, nodes[nodes.length - 1].text, size);
+}
+
+function bi(){
+    closedNodes = []; openedNodes = [];
+  	busquedaBidireccional(nodes[0].text, nodes[nodes.length - 1].text);
+}
+
+function aAs(){
+  	closedNodes = [];
+	closedNodes.push(nodes[0].text);
+	//controlNodos(nodes[0].text, closedNodes, openedNodes);
+	busquedaAstar(nodes[0].text, nodes[nodes.length - 1].text);
+}
+
+var abiertosAstar = []; var cerradosAstar = [];
+var cost; var cantidadNodos;
+
+/*
+Búsqueda A*
+node: initial state
+objetive: final state
+*/
+function busquedaAstar(node, objetive){
+	var menor = "";
+	var distancia = 10000000000;
+	if (node == objetive) {
+		//mostrarNodos(openedNodes, 'openedNodes');
+		//mostrarNodos(closedNodes, 'closedNodes');
+		return;
+	}
+		
+	else {
+		controlNodosAstar(node, abiertosAstar, cerradosAstar);
+		console.log("Expandiendo: " + node);
+		recorridoAnchura(node);
+		if (arcos.length != 0) {
+			for (var i = 0; i < arcos.length; i++) {
+				controlNodosAstar	(arcos[i].para, openedNodes, openedNodes);
+				//openedNodes.push(arcos[i].para);
+				console.log("Nodo " + arcos[i].para);
+				cost = 0; cantidadNodos = 0;
+				if (arcos[i].para == objetive) {
+					return;
+				}
+				limit = nodes.length * (nodes.length - 1);
+				var temporal = heurísticaAstar(arcos[i].para, arcos[i].costo, objetive, limit);
+				if ( temporal < distancia && temporal  > 0) {
+					menor = arcos[i].para;
+					console.log("Menor: " + arcos[i].para);
+					distancia = temporal;
+					console.log("Distancia: " + temporal);
+					cerradosAstar = [];
+				}
+			}
+			controlNodos(menor, closedNodes, openedNodes);
+			//closedNodes.push(menor);
+		}
+		else {
+			return;
+		}
+		busquedaAstar(menor, objetive);
+		return;
+	}
+	console.log(menor);
+	console.log(distancia);
+	return;
+}
+	
+
+function heurísticaAstar(node, coste, objetive, limit){
+	if (node == objetive){
+		cost = (cantidadNodos * 10) + coste;
+	    return  cost;
+  	}
+	if (buscarObjetivo(node, objetive) == objetive) {
+		console.log("Abriendo: " + buscarObjetivo(node, objetive));
+		cantidadNodos++;
+		cost + heurísticaAstar(buscarObjetivo(node, objetive), coste, objetive, limit - 1);
+
+	}
+  	if (limit == 0) {
+  		cost = 0;
+	    return cost;
+  	}
+	if (validar(recorridoAdelante(node), cerradosAstar) != true) {
+		controlNodosAstar(node, abiertosAstar, cerradosAstar);
+		cantidadNodos++;
+		console.log("Abriendo: " + recorridoAdelante(node));
+		cost + heurísticaAstar(recorridoAdelante(node), coste, objetive, limit - 1);
+	}
+	return cost;
+}
+
+function buscarObjetivo(node, objetive){
+	for (var i = 0; i < transitions.length; i++) {
+	    if (searchNodeText(transitions[i].from) == node && searchNodeText(transitions[i].to) == objetive) {
+	      return searchNodeText(transitions[i].to);
+	    }
+  	}
+  	return null;
+}
+
+function recorridoAdelante(node) {
+  	for (var i = 0; i < transitions.length; i++) {
+	    if (searchNodeText(transitions[i].from) == node && validar(searchNodeText(transitions[i].to), closedNodes) == false) {
+	      return searchNodeText(transitions[i].to);
+	    }
+  	}
+}
+
+function recorridoAtrás(node) {
+	for (var i = 0; i < transitions.length; i++) {
+	    if (searchNodeText(transitions[i].to) == node && validar(searchNodeText(transitions[i].to), closedNodes) == false) {
+	      return searchNodeText(transitions[i].from);
+	    }
+  	}
+}
+
+function recorridoAnchura(node){
+	for (var i = 0; i < transitions.length; i++) {
+		var arco = {};
+		if (searchNodeText(transitions[i].from) == node) {
+	      arco.de = searchNodeText(transitions[i].from);
+	      arco.para = searchNodeText(transitions[i].to);
+	      arco.costo = transitions[i].cost;
+	      arcos.push(arco);
+	    }
+	}
+}
+/*
+function mostrarNodos(array, htmlE) {
+  	var message = "";
+  	for (var i = 0; i < array.length; i++) {
+    	message = message + array[i] + " ";
+    	document.getElementById(htmlE).innerHTML = message;
+  	}
+}*/
+
+function controlNodos(node, arrayOne, arrayTwo) {
+  	var control = false;
+  	for (var i = 0; i < arrayOne.length; i++) {
+	    if (arrayOne[i] == node)
+	      control = true;
+  	}
+  	if (control == false) {
+	    for (var i = 0; i < arrayTwo.length; i++) {
+	      if (arrayTwo[i] == node) {
+	        arrayTwo.splice(i, 1);
+	      }
+	    }
+    	arrayOne.push(node);
+  	}
+}
+
+function llenarListaNodosBi(node, array){
+	var control = false;
+	for (var i = 0; i < array.length; i++) {
+		if (array[i] == node) {
+			control = true;
+		}
+	}
+	if (control == false) {
+		array.push(node);
+	}
+}
+
+function validar(node, array){
+	var control = false;
+	for (var i = 0; i < array.length; i++) {
+		if (array[i] == node) {
+			control = true;
+		}
+	}
+	return control;
+}
+
+function controlNodosAstar(node, arrayOne, arrayTwo){
+	var control = false;
+  	for (var i = 0; i < arrayOne.length; i++) {
+	    if (arrayOne[i] == node)
+	      control = true;
+  	}
+  	if (control == false) {
+    	arrayTwo.push(node);
+  	}
+}
