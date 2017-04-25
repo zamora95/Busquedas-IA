@@ -331,10 +331,10 @@ function createGraph (theForm) {
             n = Math.floor((Math.random() * 90) + 10);   
         }
         else if (theForm.cantidad.value == 2) {
-            n = Math.floor((Math.random() * 90000) + 10000);
+            n = Math.floor((Math.random() * 900) + 100);
         }
         else if (theForm.cantidad.value == 3) {
-            n = Math.floor((Math.random() * 9000000) + 1000000);
+            n = Math.floor((Math.random() * 9000) + 1000);
         }
 
         //createGraphAuto(theForm.cantidad.value);

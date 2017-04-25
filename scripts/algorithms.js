@@ -191,9 +191,10 @@ function ids(root, goal, limit){
 }
 
 function ids_main() {
+	var t0 = performance.now();
 	var status;
 	var depth = 1;
-	while(depth < 10) {
+	while(depth < 100) {
 		console.log(nodes[0].text + " es el nodo inicial");
 		console.log(nodes[nodes.length - 1].text + " es el nodo final");
 		desvisitar();
@@ -205,6 +206,8 @@ function ids_main() {
 		else
 			depth++;
 	}
+	var t1 = performance.now();
+	alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
 	return;
 }
 
@@ -332,9 +335,13 @@ function ucs_main() {
 	console.log(nodes[0].text + " es el nodo inicial");
 	console.log(nodes[nodes.length - 1].text + " es el nodo final");
 	desvisitar();
+	var t0 = performance.now();
 	var state = ucs(nodes[0], nodes[nodes.length - 1]);
-	if (state == 1)
+	if (state == 1) {
 		buildJSONTree();
+		var t1 = performance.now();
+		alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
+	}
 	else
 		alert("No se ha encontrado solución");
 	return;
@@ -471,9 +478,15 @@ function hill_climbing_main() {
 	console.log(nodes[0].text + " es el nodo inicial");
 	console.log(nodes[nodes.length - 1].text + " es el nodo final");
 	desvisitar();
+	var t0 = performance.now();
 	var status = hill_climbing(nodes[0], nodes[nodes.length - 1]);
-	if (status == 0)
-		console.log("No encontró solución");
+	if (state == 1) {
+		//buildJSONTree();
+		var t1 = performance.now();
+		alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
+	}
+	else
+		alert("No se ha encontrado solución");
 	return;
 }
 
