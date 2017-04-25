@@ -442,17 +442,26 @@ function createTree (theForm) {
     if(theForm.algoritmosBusqueda.value == 1){
         dfs_Main();
     }
+    else if (theForm.algoritmosBusqueda.value == 2) {
+        dls();
+    }
     else if (theForm.algoritmosBusqueda.value == 3) {
         ids_main();
     }
     else if (theForm.algoritmosBusqueda.value == 4) {
         bfs_Main();
     }
+    else if (theForm.algoritmosBusqueda.value == 5) {
+        bi();
+    }
     else if (theForm.algoritmosBusqueda.value == 6) {
         ucs_main();
     }
     else if (theForm.algoritmosBusqueda.value == 7) {
         bestFS_Main();
+    }
+    else if (theForm.algoritmosBusqueda.value == 8) {
+        aAs();
     }
     else if (theForm.algoritmosBusqueda.value == 9) {
         hill_climbing_main();
