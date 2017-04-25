@@ -59,7 +59,7 @@ function getNodosAdyacentesWithHeuristic(node,goal) {
     			transitions[i].visited = true;
     			adyacente.weight = heuristic(adyacente,goal);
 	        	nodosAdyacentes.push(adyacente); 
-	        	arcosSolucion.push(transitions[i]);	
+	        	//arcosSolucion.push(transitions[i]);	
     		}
       	}	
     }
@@ -118,7 +118,7 @@ function dfs(root, goal){
 
     while (stack.length > 0){
 	    var nodeIndex = stack.pop();
-	    nodosSolucion.push(nodeIndex);
+	 
 	    console.log(nodeIndex);
 	    if (nodeIndex == goal) {
 	    	buildJSONTree();
@@ -128,10 +128,11 @@ function dfs(root, goal){
 	   
 	    for (var i = 0; i < nodosAdyacentes.length; i++) {
 	    	console.log("Extiende: " + nodosAdyacentes[i].text);
+	    	var arco = getArco(nodeIndex, nodosAdyacentes[i]);
+			arcosSolucion.push(arco);
 	        stack.push(nodosAdyacentes[i]);
-
-	        
-	       
+	      	nodosSolucion.push(nodosAdyacentes[i]);
+ 
 	    }
 
 	    
@@ -224,7 +225,7 @@ function bfs(root,goal){
 	nodosSolucion.push(root);
 	while (queue.length > 0){
 	    var nodeIndex = queue.shift();
-	    nodosSolucion.push(nodeIndex);
+	  
 	    console.log(nodeIndex);
 	    if (nodeIndex == goal) {
 	    	buildJSONTree();
@@ -232,11 +233,12 @@ function bfs(root,goal){
 		}
 		getNodosAdyacentes_js(nodeIndex);
 	    for (var i = 0; i < nodosAdyacentes.length; i++) {
-	 	        
+	    	var arco = getArco(nodeIndex, nodosAdyacentes[i]);
+			arcosSolucion.push(arco);
 			console.log("Expande: " + nodosAdyacentes[i].text);
 			queue.push(nodosAdyacentes[i]);
-			
-			        
+			nodosSolucion.push(nodosAdyacentes[i]);
+				        
 	    }
 
 	    
@@ -381,7 +383,7 @@ function bestFS(root, goal){
 
 	while (stack.length > 0){
 	    var nodeIndex = stack.pop();
-	    nodosSolucion.push(nodeIndex);
+
 
 	    if (nodeIndex == goal) {
 		    buildJSONTree();
@@ -398,7 +400,12 @@ function bestFS(root, goal){
 		          nodeMin = nodosAdyacentes[i];
 		        }
 	      	}
+	      
+	      	var arco = getArco(nodeIndex, nodosAdyacentes[i]);
+			arcosSolucion.push(arco);
 	      	stack.push(nodeMin);
+	      	nodosSolucion.push(nodeMin);
+	      	
 	      	
 	    }  
 	}
@@ -520,9 +527,10 @@ function simulatedAnnealing(root, goal){
 
 	    
 	      	}
-	      	nodosSolucion.push(nodeMin);
+	      	var arco = getArco(nodeIndex, nodosAdyacentes[i]);
+			arcosSolucion.push(arco);
 	      	stack.push(nodeMin);
-	      	
+	      	nodosSolucion.push(nodeMin);
 	    }  
 	}
 
