@@ -2,6 +2,8 @@ nodosAdyacentes = [];
 
 var nodosSolucion = [];
 var arcosSolucion = [];
+var openedNodes = [];
+var closedNodes = [];
 
 function getNodo(identifier) {
 	for (var i = 0; i < nodes.length; i++) {
@@ -116,8 +118,13 @@ function dfs(root, goal){
     nodosSolucion.push(root);
 
 
+
     while (stack.length > 0){
 	    var nodeIndex = stack.pop();
+
+	    controlNodos(nodeIndex.text, closedNodes, openedNodes);
+	    mostrarNodos(openedNodes, 'openedNodes');
+	    mostrarNodos(closedNodes, 'closedNodes');
 	 
 	    console.log(nodeIndex);
 	    if (nodeIndex == goal) {
@@ -132,6 +139,9 @@ function dfs(root, goal){
 			arcosSolucion.push(arco);
 	        stack.push(nodosAdyacentes[i]);
 	      	nodosSolucion.push(nodosAdyacentes[i]);
+	      	controlNodos(nodosAdyacentes[i].text, closedNodes, openedNodes);
+	    	mostrarNodos(openedNodes, 'openedNodes');
+	    	mostrarNodos(closedNodes, 'closedNodes');
  
 	    }
 
@@ -144,6 +154,9 @@ function dfs(root, goal){
 Main of Algorithms Depth-First Search (DFS)
 */
 function dfs_Main(){
+	openedNodes = [];
+	closedNodes = [];
+
 	dfs(nodes[0],nodes[nodes.length-1]);
 }
 
@@ -228,6 +241,9 @@ function bfs(root,goal){
 	nodosSolucion.push(root);
 	while (queue.length > 0){
 	    var nodeIndex = queue.shift();
+	    controlNodos(nodeIndex.text, closedNodes, openedNodes);
+	    mostrarNodos(openedNodes, 'openedNodes');
+	    mostrarNodos(closedNodes, 'closedNodes');
 	  
 	    console.log(nodeIndex);
 	    if (nodeIndex == goal) {
@@ -241,6 +257,10 @@ function bfs(root,goal){
 			console.log("Expande: " + nodosAdyacentes[i].text);
 			queue.push(nodosAdyacentes[i]);
 			nodosSolucion.push(nodosAdyacentes[i]);
+
+			controlNodos(nodosAdyacentes[i].text, closedNodes, openedNodes);
+	    	mostrarNodos(openedNodes, 'openedNodes');
+	    	mostrarNodos(closedNodes, 'closedNodes');
 				        
 	    }
 
@@ -252,6 +272,8 @@ function bfs(root,goal){
 Main of Breadth-First Search (BFS)
 */
 function bfs_Main(){
+	openedNodes = [];
+	closedNodes = [];
 	bfs(nodes[0],nodes[nodes.length-1]);
 }
 
@@ -390,6 +412,9 @@ function bestFS(root, goal){
 
 	while (stack.length > 0){
 	    var nodeIndex = stack.pop();
+	    controlNodos(nodeIndex.text, closedNodes, openedNodes);
+	    mostrarNodos(openedNodes, 'openedNodes');
+	    mostrarNodos(closedNodes, 'closedNodes');
 
 
 	    if (nodeIndex == goal) {
@@ -412,6 +437,9 @@ function bestFS(root, goal){
 			arcosSolucion.push(arco);
 	      	stack.push(nodeMin);
 	      	nodosSolucion.push(nodeMin);
+	      	controlNodos(nodeMin.text, closedNodes, openedNodes);
+	    	mostrarNodos(openedNodes, 'openedNodes');
+	    	mostrarNodos(closedNodes, 'closedNodes');
 	      	
 	      	
 	    }  
@@ -422,6 +450,8 @@ function bestFS(root, goal){
 Main of Breadth-First Search (BFS)
 */
 function bestFS_Main(){
+	openedNodes = [];
+	closedNodes = [];
 	bestFS(nodes[0],nodes[nodes.length-1]);
 }
 
@@ -510,10 +540,13 @@ function simulatedAnnealing(root, goal){
 
 	while (stack.length > 0){
 	    var nodeIndex = stack.pop();
+	    controlNodos(nodeIndex.text, closedNodes, openedNodes);
+	    mostrarNodos(openedNodes, 'openedNodes');
+	    mostrarNodos(closedNodes, 'closedNodes');
 	
 	    if (nodosAdyacentes[i] == goal) {
-		buildJSONTree();
-		return;
+			buildJSONTree();
+			return;
 	    }
 	    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
 	    console.log(nodeIndex);
@@ -543,7 +576,12 @@ function simulatedAnnealing(root, goal){
 	      		var arco = getArco(nodeIndex,nodeMin);
 				arcosSolucion.push(arco);
 		      	stack.push(nodeMin);
+
 		      	nodosSolucion.push(nodeMin);
+		      	controlNodos(nodeMin.text, closedNodes, openedNodes);
+	    		mostrarNodos(openedNodes, 'openedNodes');
+	    		mostrarNodos(closedNodes, 'closedNodes');
+
 	      	}
 	      
 	    }  
@@ -556,11 +594,12 @@ function simulatedAnnealing(root, goal){
 Main of Simulated Annealing
 */
 function simulatedAnnealing_Main(){
+	openedNodes = [];
+	closedNodes = [];
 	simulatedAnnealing(nodes[0],nodes[nodes.length-1]);
 }
 
-var openedNodes = [];
-var closedNodes = [];
+
 var visitedNodes = [];
 var arcos = [];
 var size; var limit;
