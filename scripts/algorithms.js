@@ -185,25 +185,12 @@ function bfs(root,goal){
     if (nodeIndex == goal) {
 		return;
 	}
-    for (var i = 0; i < transitions.length; i++) {
-      	if(transitions[i].from == nodeIndex.identifier){ 
-        	if (transitions[i].visited != true){
-	          	var nodeX = getNodobyId(transitions[i].to);
-	          	if (nodeX != 1) {
-		          	
-			        transitions[i].visited = true;
-			        console.log("Expande: " + nodeX.text);
-			        queue.push(nodeX);
-		          	
-
-	          	}
-         
-
-        	}       
-            
-      	}
-      
-        
+	getNodosAdyacentes_js(nodeIndex);
+    for (var i = 0; i < nodosAdyacentes.length; i++) {
+ 	        
+		console.log("Expande: " + nodosAdyacentes[i].text);
+		queue.push(nodosAdyacentes[i]);
+		        
     }
 
     
