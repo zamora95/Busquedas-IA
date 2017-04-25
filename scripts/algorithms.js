@@ -173,6 +173,9 @@ function dfs_Main(){
 	limit: search limit of depth tree
 */
 function ids(root, goal, limit){
+	var openedNodes = [];
+	var closedNodes = [];
+
 	nodosSolucion = [];
 	arcosSolucion = [];
 
@@ -186,13 +189,19 @@ function ids(root, goal, limit){
 	s_p.push(root);
 	sd_p.push(0);
 	nodosSolucion.push(root);
+	openedNodes.push(root.text);
 
 	while(s_p.length > 0) {
 		node = s_p.pop();
 		depth = sd_p.pop();
 		console.log(node.text + " en la profundidad " + depth);
+		controlNodos(node.text, closedNodes, openedNodes);
 
-		if (node == goal) {return 1};
+		if (node == goal) {
+			mostrarNodos(openedNodes, 'openedNodes');
+			mostrarNodos(closedNodes, 'closedNodes');
+			return 1;
+		}
 		if (depth < limit) {
 			getNodosAdyacentes(node);
 			for (to = nodosAdyacentes.length - 1; to >= 0; to--) {
@@ -201,6 +210,7 @@ function ids(root, goal, limit){
 				s_p.push(nodosAdyacentes[to]);
 				sd_p.push(depth+1);
 				nodosSolucion.push(nodosAdyacentes[to]);
+				openedNodes.push(nodosAdyacentes[to].text);
 			}
 		}
 	}
@@ -227,7 +237,6 @@ function ids_main() {
 	alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
 	return;
 }
-
 
 
 /*
@@ -325,6 +334,9 @@ function PQueue() {
 	goal: final state
 */
 function ucs(root, goal) {
+	var openedNodes = [];
+	var closedNodes = [];
+
 	nodosSolucion = [];
 	arcosSolucion = [];
 
@@ -338,12 +350,16 @@ function ucs(root, goal) {
 	root.cost = 0;
 	q_p.enPQueue(root);
 	nodosSolucion.push(root);
+	openedNodes.push(root.text);
 
 	while(!q_p.isEmptyPQueue()) {
 		node = q_p.dePQueue();
 		cost = node.cost;
+		controlNodos(node.text, closedNodes, openedNodes);
 		if (node.identifier == goal.identifier) {
 			console.log("Costo: " + cost);
+			mostrarNodos(openedNodes, 'openedNodes');
+			mostrarNodos(closedNodes, 'closedNodes');
 			return 1;
 		}
 		getNodosAdyacentes(node);
@@ -354,6 +370,7 @@ function ucs(root, goal) {
 			nodosAdyacentes[to].cost = child_cost + cost;
 			q_p.enPQueue(nodosAdyacentes[to]);
 			nodosSolucion.push(nodosAdyacentes[to]);
+			openedNodes.push(nodosAdyacentes[to].text);
 			console.log(nodosAdyacentes[to].text + " pesa " + nodosAdyacentes[to].cost);
 		}
 	}
@@ -375,7 +392,6 @@ function ucs_main() {
 		alert("No se ha encontrado solución");
 	return;
 }
-
 
 /*
 	Heuristic
@@ -473,6 +489,12 @@ function bestFS_Main(){
 	goal: final state
 */
 function hill_climbing(root, goal) {
+	var openedNodes = [];
+	var closedNodes = [];
+
+	nodosSolucion = [];
+	arcosSolucion = [];
+
 	var node;
 	var currentEvaluation;
 	var nextEvaluation;
@@ -481,32 +503,41 @@ function hill_climbing(root, goal) {
 
 	var s_p = new Array();
 
-	s_p.push(root);
 	currentEvaluation = heuristic(root, goal);
+	s_p.push(root);
+	nodosSolucion.push(root);
 	console.log("Entró " + root.text);
+	openedNodes.push(root.text);
 
 	while(s_p.length > 0) {
 		node = s_p.pop();
+		controlNodos(node.text, closedNodes, openedNodes);
 
-		if (node.identifier == goal.identifier) 
+		if (node.identifier == goal.identifier) {
+			mostrarNodos(openedNodes, 'openedNodes');
+			mostrarNodos(closedNodes, 'closedNodes');
 			return 1;
+		}
 		
 		getNodosAdyacentes(node);
 		
 		if (nodosAdyacentes.length > 0) {
 			for (var to = nodosAdyacentes.length - 1; to >= 0; to--) {
 				nextEvaluation = heuristic(nodosAdyacentes[to], goal);
+				openedNodes.push(nodosAdyacentes[to].text);
 				console.log("La estimación de " + nodosAdyacentes[to].text + " a " + goal.text + " es " + nextEvaluation);
 				if (nextEvaluation < currentEvaluation) {
 					currentEvaluation = nextEvaluation;
 					localOptimum = nodosAdyacentes[to];
 					isBetter = true;
-
+					var arco = getArco(node, nodosAdyacentes[to]);
+					arcosSolucion.push(arco);
 				}
 			}
 			if (isBetter) {
 				console.log(localOptimum.text + "es mejor=" + isBetter + " que " + node.text);
 				s_p.push(localOptimum);
+				nodosSolucion.push(localOptimum);
 				console.log("Entró " + localOptimum.text);
 				isBetter = false;
 			}
@@ -522,7 +553,7 @@ function hill_climbing_main() {
 	var t0 = performance.now();
 	var status = hill_climbing(nodes[0], nodes[nodes.length - 1]);
 	if (status == 1) {
-		//buildJSONTree();
+		buildJSONTree();
 		var t1 = performance.now();
 		alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
 	}
@@ -530,7 +561,6 @@ function hill_climbing_main() {
 		alert("No se ha encontrado solución");
 	return;
 }
-
 
 
 /*
