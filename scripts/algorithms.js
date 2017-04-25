@@ -476,22 +476,20 @@ function simulatedAnnealing(root, goal){
 
 	while (stack.length > 0){
 	    var nodeIndex = stack.pop();
-		nodosSolucion.push(nodeIndex);
-
-	    if (nodeIndex == goal) {
-		    buildJSONTree();
-		    return;
-		}
+		
 	    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
 	    console.log(nodeIndex);
 	    if(nodosAdyacentes.length > 0){
 	      	weigMin = 1000;
 	      	for (var i = 0; i < nodosAdyacentes.length; i++) {
-
-		       
-
 		        var randomNeighbour = Math.floor(Math.random() * 10) + 1;
-		        console.log(randomNeighbour);
+		        
+		        if (nodosAdyacentes[i] == goal) {
+			    	console.log("ENTRE ALSDKFALSDFJLAS");
+				    buildJSONTree();
+				    return;
+				}
+
 		        if(nodosAdyacentes[i].weight > randomNeighbour){
 		          	nodeTemp = nodosAdyacentes[i];
 		        }
@@ -508,6 +506,7 @@ function simulatedAnnealing(root, goal){
 
 	    
 	      	}
+	      	nodosSolucion.push(nodeMin);
 	      	stack.push(nodeMin);
 	      	
 	    }  
