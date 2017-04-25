@@ -3,9 +3,15 @@ nodosAdyacentes = [];
 function getNodobyId(identifier) {
 	for (var i = 0; i < nodes.length; i++) {
 		if (nodes[i].identifier == identifier) {
-			return nodes[i];
-		};
+			if(nodes[i].visited != true){
+				nodes[i].visited = true;
+				return nodes[i];	
+			}
+
+			
+		}
 	}
+	return 1;
 }
 
 function getArco(from, to) {
@@ -27,12 +33,15 @@ function getNodosAdyacentesWithHeuristic(node,goal) {
   nodosAdyacentes = [];
   for (var i = 0; i < transitions.length; i++) {
     if(transitions[i].visited != true){
-       if (transitions[i].from == node.identifier) {
-        transitions[i].visited = true;
-        var adyacente = getNodobyId(transitions[i].to);
-        adyacente.weight = heuristic(adyacente,goal);
-        nodosAdyacentes.push(adyacente);
-      }
+       	if (transitions[i].from == node.identifier) {
+        	var adyacente = getNodobyId(transitions[i].to);
+        	if (adyacente != 1){
+    			transitions[i].visited = true;
+    			adyacente.weight = heuristic(adyacente,goal);
+	        	nodosAdyacentes.push(adyacente); 	
+    		}
+      
+      	}	
 
     }
    
@@ -61,14 +70,16 @@ function getNodosAdyacentes_js(node) {
   	for (var i = 0; i < transitions.length; i++) {
     	if(transitions[i].visited != true){
     		if (transitions[i].from == node.identifier) {
-        		transitions[i].visited = true;
-        		var adyacente = getNodobyId(transitions[i].to);
-        		nodosAdyacentes.push(adyacente);   
+    			var adyacente = getNodobyId(transitions[i].to);	
+    			if (adyacente != 1){
+    				transitions[i].visited = true;
+	        		nodosAdyacentes.push(adyacente); 	
+    			}
+    				
       		}
     	}
   	}
 }
-
 
 /*
 Algorithms Depth-First Search (DFS)
@@ -77,7 +88,6 @@ root:initial state
 goal:final state
 */
 function dfs(root, goal){
-  console.log(root);
   var stack = [root];
   nodes[0].visited = true;
   while (stack.length > 0){
@@ -90,6 +100,7 @@ function dfs(root, goal){
     getNodosAdyacentes_js(nodeIndex);
    
     for (var i = 0; i < nodosAdyacentes.length; i++) {
+    	console.log("Extiende: " + nodosAdyacentes[i].text);
         stack.push(nodosAdyacentes[i]);
        
     }
@@ -172,20 +183,25 @@ function bfs(root,goal){
     var nodeIndex = queue.shift();
     console.log(nodeIndex);
     if (nodeIndex == goal) {
-        return;
-    }
-
+		return;
+	}
     for (var i = 0; i < transitions.length; i++) {
-      if(transitions[i].from == nodeIndex.identifier){ 
-        if (transitions[i].visited != true){
-          var nodeX = getNodobyId(transitions[i].to);
-          transitions[i].visited = true;
-          console.log("Expande: " + nodeX.text);
-          queue.push(nodeX);
-       
-        }       
+      	if(transitions[i].from == nodeIndex.identifier){ 
+        	if (transitions[i].visited != true){
+	          	var nodeX = getNodobyId(transitions[i].to);
+	          	if (nodeX != 1) {
+		          	
+			        transitions[i].visited = true;
+			        console.log("Expande: " + nodeX.text);
+			        queue.push(nodeX);
+		          	
+
+	          	}
+         
+
+        	}       
             
-      }
+      	}
       
         
     }
@@ -194,7 +210,6 @@ function bfs(root,goal){
   }
 
 }
-
 /*
 Main of Breadth-First Search (BFS)
 */
