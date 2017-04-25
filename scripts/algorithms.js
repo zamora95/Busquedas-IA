@@ -49,7 +49,8 @@ function getNodosAdyacentesWithHeuristic(node,goal) {
         	if (adyacente != 1){
     			transitions[i].visited = true;
     			adyacente.weight = heuristic(adyacente,goal);
-	        	nodosAdyacentes.push(adyacente); 	
+	        	nodosAdyacentes.push(adyacente); 
+	        	arcosSolucion.push(transitions[i]);	
     		}
       	}	
     }
@@ -96,25 +97,32 @@ root:initial state
 goal:final state
 */
 function dfs(root, goal){
-  var stack = [root];
-  nodes[0].visited = true;
-  while (stack.length > 0){
-    var nodeIndex = stack.pop();
-    console.log(nodeIndex);
-    if (nodeIndex == goal) {
-    	
-        return;
-    }
-    getNodosAdyacentes_js(nodeIndex);
-   
-    for (var i = 0; i < nodosAdyacentes.length; i++) {
-    	console.log("Extiende: " + nodosAdyacentes[i].text);
-        stack.push(nodosAdyacentes[i]);
-       
-    }
+	nodosSolucion = [];
+	arcosSolucion = [];
 
-    
-  }
+	var stack = [root];
+    nodes[0].visited = true;
+    nodosSolucion.push(root);
+
+
+    while (stack.length > 0){
+	    var nodeIndex = stack.pop();
+	    console.log(nodeIndex);
+	    if (nodeIndex == goal) {
+	    	
+	        return;
+	    }
+	    getNodosAdyacentes_js(nodeIndex);
+	   
+	    for (var i = 0; i < nodosAdyacentes.length; i++) {
+	    	console.log("Extiende: " + nodosAdyacentes[i].text);
+	        stack.push(nodosAdyacentes[i]);
+	        nodosSolucion.push(nodosAdyacentes[i]);
+	       
+	    }
+
+	    
+  	}
 
 }
 
@@ -193,24 +201,29 @@ root:initial state
 goal:final state
 */
 function bfs(root,goal){
-  var queue = [root];
-  nodes[0].visited = true;
-  while (queue.length > 0){
-    var nodeIndex = queue.shift();
-    console.log(nodeIndex);
-    if (nodeIndex == goal) {
-		return;
-	}
-	getNodosAdyacentes_js(nodeIndex);
-    for (var i = 0; i < nodosAdyacentes.length; i++) {
- 	        
-		console.log("Expande: " + nodosAdyacentes[i].text);
-		queue.push(nodosAdyacentes[i]);
-		        
-    }
+	nodosSolucion = [];
+	arcosSolucion = [];
 
-    
-  }
+	var queue = [root];
+	nodes[0].visited = true;
+	nodosSolucion.push(root);
+	while (queue.length > 0){
+	    var nodeIndex = queue.shift();
+	    console.log(nodeIndex);
+	    if (nodeIndex == goal) {
+			return;
+		}
+		getNodosAdyacentes_js(nodeIndex);
+	    for (var i = 0; i < nodosAdyacentes.length; i++) {
+	 	        
+			console.log("Expande: " + nodosAdyacentes[i].text);
+			queue.push(nodosAdyacentes[i]);
+			nodosSolucion.push(nodosAdyacentes[i]);
+			        
+	    }
+
+	    
+	}
 
 }
 /*
@@ -339,30 +352,35 @@ root:initial state
 goal:final state
 */
 function bestFS(root, goal){
-  var stack = [root];
-  var nodeMin;
-  var nodeTemp;
-  nodes[0].visited = true;
+	nodosSolucion = [];
+	arcosSolucion = [];
+	var stack = [root];
+	var nodeMin;
+	var nodeTemp;
+	nodes[0].visited = true;
+	nodosSolucion.push(root);
 
-  while (stack.length > 0){
-    var nodeIndex = stack.pop();
-    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
-    console.log(nodeIndex);
-    if(nodosAdyacentes.length > 0){
-      weightMin = 1000;
-      for (var i = 0; i < nodosAdyacentes.length; i++) {
-        if (nodosAdyacentes[i] == goal) {
-          console.log("Prueba" + nodosAdyacentes[i].text);
-          return;
-        }
-        if (nodosAdyacentes[i].weight < weightMin){
-          weightMin = nodosAdyacentes[i].weight;
-          nodeMin = nodosAdyacentes[i];
-        }
-      }
-      stack.push(nodeMin);
-    }  
-  }
+
+	while (stack.length > 0){
+	    var nodeIndex = stack.pop();
+	    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
+	    console.log(nodeIndex);
+	    if(nodosAdyacentes.length > 0){
+	      	weightMin = 1000;
+	      	for (var i = 0; i < nodosAdyacentes.length; i++) {
+		        if (nodosAdyacentes[i] == goal) {
+		          console.log("Prueba" + nodosAdyacentes[i].text);
+		          return;
+		        }
+		        if (nodosAdyacentes[i].weight < weightMin){
+		          weightMin = nodosAdyacentes[i].weight;
+		          nodeMin = nodosAdyacentes[i];
+		        }
+	      	}
+	      	stack.push(nodeMin);
+	      	nodosSolucion.push(nodeMin);
+	    }  
+	}
 }
 
 /*
@@ -440,46 +458,50 @@ root:initial state
 goal:final state
 */
 function simulatedAnnealing(root, goal){
-  console.log("ENTRE");
-  var stack = [root];
-  var nodeMin;
-  var nodeTemp;
-  nodes[0].visited = true;
+ 	nodosSolucion = [];
+	arcosSolucion = [];
 
-  while (stack.length > 0){
-    var nodeIndex = stack.pop();
-    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
-    console.log(nodeIndex);
-    if(nodosAdyacentes.length > 0){
-      weigMin = 1000;
-      for (var i = 0; i < nodosAdyacentes.length; i++) {
+ 	var stack = [root];
+  	var nodeMin;
+  	var nodeTemp;
+  	nodes[0].visited = true;
+  	nodosSolucion.push(root);
 
-        if (nodosAdyacentes[i] == goal) {
-          console.log("Prueba" + nodosAdyacentes[i].text);
-          return;
-        }
+	while (stack.length > 0){
+	    var nodeIndex = stack.pop();
+	    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
+	    console.log(nodeIndex);
+	    if(nodosAdyacentes.length > 0){
+	      	weigMin = 1000;
+	      	for (var i = 0; i < nodosAdyacentes.length; i++) {
 
-        var randomNeighbour = Math.floor(Math.random() * 10) + 1;
-        console.log(randomNeighbour);
-        if(nodosAdyacentes[i].weight > randomNeighbour){
-          nodeTemp = nodosAdyacentes[i];
-        }
+		        if (nodosAdyacentes[i] == goal) {
+		          	console.log("Prueba" + nodosAdyacentes[i].text);
+		          	return;
+		        }
 
-        if (nodeTemp != null) {
-          if (nodeTemp.weight < weigMin){
+		        var randomNeighbour = Math.floor(Math.random() * 10) + 1;
+		        console.log(randomNeighbour);
+		        if(nodosAdyacentes[i].weight > randomNeighbour){
+		          	nodeTemp = nodosAdyacentes[i];
+		        }
 
-            weightMin = nodeTemp.weight;
-            nodeMin = nodeTemp;
-            console.log("Prueba" + nodeMin.text);
-          }
+		        if (nodeTemp != null) {
+		          	if (nodeTemp.weight < weigMin){
 
-        }
+			            weightMin = nodeTemp.weight;
+			            nodeMin = nodeTemp;
+			            console.log("Prueba" + nodeMin.text);
+			        }
 
-    
-      }
-      stack.push(nodeMin);
-    }  
-  }
+		        }
+
+	    
+	      	}
+	      	stack.push(nodeMin);
+	      	nodosSolucion.push(nodeMin);
+	    }  
+	}
 
 
 }
