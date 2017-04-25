@@ -107,9 +107,10 @@ function dfs(root, goal){
 
     while (stack.length > 0){
 	    var nodeIndex = stack.pop();
+	    nodosSolucion.push(nodeIndex);
 	    console.log(nodeIndex);
 	    if (nodeIndex == goal) {
-	    	
+	    	buildJSONTree();
 	        return;
 	    }
 	    getNodosAdyacentes_js(nodeIndex);
@@ -117,7 +118,8 @@ function dfs(root, goal){
 	    for (var i = 0; i < nodosAdyacentes.length; i++) {
 	    	console.log("Extiende: " + nodosAdyacentes[i].text);
 	        stack.push(nodosAdyacentes[i]);
-	        nodosSolucion.push(nodosAdyacentes[i]);
+
+	        
 	       
 	    }
 
@@ -209,8 +211,10 @@ function bfs(root,goal){
 	nodosSolucion.push(root);
 	while (queue.length > 0){
 	    var nodeIndex = queue.shift();
+	    nodosSolucion.push(nodeIndex);
 	    console.log(nodeIndex);
 	    if (nodeIndex == goal) {
+	    	buildJSONTree();
 			return;
 		}
 		getNodosAdyacentes_js(nodeIndex);
@@ -218,7 +222,7 @@ function bfs(root,goal){
 	 	        
 			console.log("Expande: " + nodosAdyacentes[i].text);
 			queue.push(nodosAdyacentes[i]);
-			nodosSolucion.push(nodosAdyacentes[i]);
+			
 			        
 	    }
 
@@ -363,22 +367,25 @@ function bestFS(root, goal){
 
 	while (stack.length > 0){
 	    var nodeIndex = stack.pop();
+	    nodosSolucion.push(nodeIndex);
+
+	    if (nodeIndex == goal) {
+		    buildJSONTree();
+		    return;
+		}
 	    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
 	    console.log(nodeIndex);
 	    if(nodosAdyacentes.length > 0){
 	      	weightMin = 1000;
 	      	for (var i = 0; i < nodosAdyacentes.length; i++) {
-		        if (nodosAdyacentes[i] == goal) {
-		          console.log("Prueba" + nodosAdyacentes[i].text);
-		          return;
-		        }
+		       
 		        if (nodosAdyacentes[i].weight < weightMin){
 		          weightMin = nodosAdyacentes[i].weight;
 		          nodeMin = nodosAdyacentes[i];
 		        }
 	      	}
 	      	stack.push(nodeMin);
-	      	nodosSolucion.push(nodeMin);
+	      	
 	    }  
 	}
 }
@@ -469,16 +476,19 @@ function simulatedAnnealing(root, goal){
 
 	while (stack.length > 0){
 	    var nodeIndex = stack.pop();
+		nodosSolucion.push(nodeIndex);
+
+	    if (nodeIndex == goal) {
+		    buildJSONTree();
+		    return;
+		}
 	    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
 	    console.log(nodeIndex);
 	    if(nodosAdyacentes.length > 0){
 	      	weigMin = 1000;
 	      	for (var i = 0; i < nodosAdyacentes.length; i++) {
 
-		        if (nodosAdyacentes[i] == goal) {
-		          	console.log("Prueba" + nodosAdyacentes[i].text);
-		          	return;
-		        }
+		       
 
 		        var randomNeighbour = Math.floor(Math.random() * 10) + 1;
 		        console.log(randomNeighbour);
@@ -499,7 +509,7 @@ function simulatedAnnealing(root, goal){
 	    
 	      	}
 	      	stack.push(nodeMin);
-	      	nodosSolucion.push(nodeMin);
+	      	
 	    }  
 	}
 
