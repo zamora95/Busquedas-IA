@@ -154,10 +154,14 @@ function dfs(root, goal){
 Main of Algorithms Depth-First Search (DFS)
 */
 function dfs_Main(){
+
+	t0 = performance.now();
 	openedNodes = [];
 	closedNodes = [];
 
 	dfs(nodes[0],nodes[nodes.length-1]);
+	t1 = performance.now();
+	alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
 }
 
 
@@ -272,9 +276,12 @@ function bfs(root,goal){
 Main of Breadth-First Search (BFS)
 */
 function bfs_Main(){
+	t0 = performance.now();
 	openedNodes = [];
 	closedNodes = [];
 	bfs(nodes[0],nodes[nodes.length-1]);
+	t1 = performance.now();
+	alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
 }
 
 
@@ -450,9 +457,13 @@ function bestFS(root, goal){
 Main of Breadth-First Search (BFS)
 */
 function bestFS_Main(){
+	t0 = performance.now();
 	openedNodes = [];
 	closedNodes = [];
 	bestFS(nodes[0],nodes[nodes.length-1]);
+	t1 = performance.now();
+	alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
+
 }
 
 
@@ -594,9 +605,12 @@ function simulatedAnnealing(root, goal){
 Main of Simulated Annealing
 */
 function simulatedAnnealing_Main(){
+	t0 = performance.now();
 	openedNodes = [];
 	closedNodes = [];
 	simulatedAnnealing(nodes[0],nodes[nodes.length-1]);
+	t1 = performance.now();
+	alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
 }
 
 
