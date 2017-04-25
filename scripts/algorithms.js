@@ -401,7 +401,7 @@ function bestFS(root, goal){
 		        }
 	      	}
 	      
-	      	var arco = getArco(nodeIndex, nodosAdyacentes[i]);
+	      	var arco = getArco(nodeIndex, nodeMin);
 			arcosSolucion.push(arco);
 	      	stack.push(nodeMin);
 	      	nodosSolucion.push(nodeMin);
@@ -527,7 +527,7 @@ function simulatedAnnealing(root, goal){
 
 	    
 	      	}
-	      	var arco = getArco(nodeIndex, nodosAdyacentes[i]);
+	      	var arco = getArco(nodeIndex,nodeMin);
 			arcosSolucion.push(arco);
 	      	stack.push(nodeMin);
 	      	nodosSolucion.push(nodeMin);
