@@ -84,10 +84,24 @@ function loadTree() {
 }
 
 
+var arcosSolucionTemp;
+
+function getArcoTemp(to) {
+    var arcoSeleccionado;
+    for (var i = 0; i < arcosSolucionTemp.length; i++) {
+        if (arcosSolucionTemp[i].to == to) {
+            arcoSeleccionado = arcosSolucionTemp[i];
+            arcosSolucionTemp.splice(i, 1);
+            return arcoSeleccionado;
+        }
+    }
+}
+
 function buildJSONTree() {
     var parent;
     var JSONString = "{ \"class\": \"go.TreeModel\",\"nodeDataArray\": [ ";
     var nodeJSON;
+    arcosSolucionTemp = arcosSolucion.slice();
 
     for (var i = 0; i < nodosSolucion.length; i++) {
         if (i == 0) {
@@ -96,17 +110,14 @@ function buildJSONTree() {
             continue;
         }
 
-        for (var j = 0; j < arcosSolucion.length; j++) {
-            if (arcosSolucion[j].to == nodosSolucion[i].identifier) {
-                parent = arcosSolucion[j].from;
-                nodeJSON = "{\"key\":" + nodosSolucion[i].identifier + ", \"text\":\"" + nodosSolucion[i].text + "\", \"parent\":" + parent + "}";
+        var arcoSeleccionado = getArcoTemp(nodosSolucion[i].identifier);
+        parent = arcoSeleccionado.from;
+        nodeJSON = "{\"key\":" + nodosSolucion[i].identifier + ", \"text\":\"" + nodosSolucion[i].text + "\", \"parent\":" + parent + "}";
 
-                if (i < nodosSolucion.length-1) {
-                    nodeJSON += ",";
-                }
-                JSONString += nodeJSON;
-            }
+        if (i < nodosSolucion.length-1) {
+            nodeJSON += ",";
         }
+        JSONString += nodeJSON;
     }
 
     JSONString += " ]}";

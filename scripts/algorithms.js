@@ -3,6 +3,15 @@ nodosAdyacentes = [];
 var nodosSolucion = [];
 var arcosSolucion = [];
 
+function getNodo(identifier) {
+	for (var i = 0; i < nodes.length; i++) {
+		if (nodes[i].identifier == identifier) {
+			return nodes[i];	
+		}
+	}
+	return 1;
+}
+
 function getNodobyId(identifier) {
 	for (var i = 0; i < nodes.length; i++) {
 		if (nodes[i].identifier == identifier) {
@@ -60,16 +69,18 @@ function getNodosAdyacentesWithHeuristic(node,goal) {
 
 function getNodosAdyacentes(node) {
 	nodosAdyacentes = [];
-	var id = node.identifier;
-	//console.log("Los vecinos de " + node.text + " son: ")
-	for (var i = 0; i < transitions.length; i++) {
-		if (transitions[i].from == id) {
-			var adyacente = getNodobyId(transitions[i].to);
-			nodosAdyacentes.push(adyacente);
-			arcosSolucion.push(transitions[i]);
-			//console.log(adyacente.text + ", ");
-		}
-	}
+  	for (var i = 0; i < transitions.length; i++) {
+    	if(transitions[i].visited != true){
+    		if (transitions[i].from == node.identifier) {
+    			var adyacente = getNodo(transitions[i].to);	
+    			if (adyacente != 1){
+    				transitions[i].visited = true;
+	        		nodosAdyacentes.push(adyacente);
+	        		//arcosSolucion.push(transitions[i]);
+    			}
+      		}
+    	}
+  	}
 }
 
 
@@ -83,7 +94,7 @@ function getNodosAdyacentes_js(node) {
     			if (adyacente != 1){
     				transitions[i].visited = true;
 	        		nodosAdyacentes.push(adyacente);
-	        		arcosSolucion.push(transitions[i]);
+	        		//arcosSolucion.push(transitions[i]);
     			}
       		}
     	}
@@ -167,6 +178,8 @@ function ids(root, goal, limit){
 		if (depth < limit) {
 			getNodosAdyacentes(node);
 			for (to = nodosAdyacentes.length - 1; to >= 0; to--) {
+				var arco = getArco(node, nodosAdyacentes[to]);
+				arcosSolucion.push(arco);
 				s_p.push(nodosAdyacentes[to]);
 				sd_p.push(depth+1);
 				nodosSolucion.push(nodosAdyacentes[to]);
@@ -299,9 +312,10 @@ function ucs(root, goal) {
 			console.log("Costo: " + cost);
 			return 1;
 		}
-		getNodosAdyacentes_js(node);
+		getNodosAdyacentes(node);
 		for (to = nodosAdyacentes.length - 1; to >= 0; to--) {
 			var arco = getArco(node, nodosAdyacentes[to]);
+			arcosSolucion.push(arco);
 			child_cost = arco.weight;
 			nodosAdyacentes[to].cost = child_cost + cost;
 			q_p.enPQueue(nodosAdyacentes[to]);
