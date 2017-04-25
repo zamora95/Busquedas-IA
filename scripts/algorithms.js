@@ -480,7 +480,7 @@ function hill_climbing_main() {
 	desvisitar();
 	var t0 = performance.now();
 	var status = hill_climbing(nodes[0], nodes[nodes.length - 1]);
-	if (state == 1) {
+	if (status == 1) {
 		//buildJSONTree();
 		var t1 = performance.now();
 		alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
