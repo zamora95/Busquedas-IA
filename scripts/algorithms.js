@@ -510,7 +510,11 @@ function simulatedAnnealing(root, goal){
 
 	while (stack.length > 0){
 	    var nodeIndex = stack.pop();
-		
+	
+	    if (nodosAdyacentes[i] == goal) {
+		buildJSONTree();
+		return;
+	    }
 	    getNodosAdyacentesWithHeuristic(nodeIndex,goal);
 	    console.log(nodeIndex);
 	    if(nodosAdyacentes.length > 0){
@@ -518,11 +522,7 @@ function simulatedAnnealing(root, goal){
 	      	for (var i = 0; i < nodosAdyacentes.length; i++) {
 		        var randomNeighbour = Math.floor(Math.random() * 10) + 1;
 		        
-		        if (nodosAdyacentes[i] == goal) {
-				    buildJSONTree();
-				    return;
-				}
-
+		      
 		        if(nodosAdyacentes[i].weight > randomNeighbour){
 		          	nodeTemp = nodosAdyacentes[i];
 		        }
