@@ -546,6 +546,12 @@ function simulatedAnnealing_Main(){
 	simulatedAnnealing(nodes[0],nodes[nodes.length-1]);
 }
 
+var openedNodes = [];
+var closedNodes = [];
+var visitedNodes = [];
+var arcos = [];
+var size; var limit;
+
 /*Método DLS
 node: initial state
 objetive: final state
@@ -555,20 +561,20 @@ function busquedaDls(node, objetive, size) {
 	if (node == objetive){
 		nodosSolucion.push(retornarNodo(node));
 		buildJSONTree();
-		//controlNodos(node, closedNodes, openedNodes);
-	    //mostrarNodos(openedNodes, 'openedNodes');
-	    //mostrarNodos(closedNodes, 'closedNodes');
+		controlNodos(node, closedNodes, openedNodes);
+	    mostrarNodos(openedNodes, 'openedNodes');
+	    mostrarNodos(closedNodes, 'closedNodes');
 	    return;
   	}
   	if (size == 0) {
-  		//mostrarNodos(openedNodes, 'openedNodes');
-	    //mostrarNodos(closedNodes, 'closedNodes');
+  		mostrarNodos(openedNodes, 'openedNodes');
+	    mostrarNodos(closedNodes, 'closedNodes');
 	    return;
   	}
   	else {
-    	//controlNodos(recorridoAdelante(node), openedNodes, closedNodes);
-		//console.log("Abriendo: " + recorridoAdelante(node));
-		//controlNodos(node, closedNodes, openedNodes);
+    	controlNodos(recorridoAdelante(node), openedNodes, closedNodes);
+		console.log("Abriendo: " + recorridoAdelante(node));
+		controlNodos(node, closedNodes, openedNodes);
 		console.log("Cerrando: " + node);
 		nodosSolucion.push(retornarNodo(node));
 		console.log(retornarNodo(node));
@@ -587,36 +593,30 @@ function retornarNodo(node){
 	return;
 }
 
-var openedNodes = [];
-var closedNodes = [];
-var visitedNodes = [];
-var arcos = [];
-var size; var limit;
-
 /*Método de Búsqueda Bidireccional
 node: initial state
 objetive: final state
 */
 function busquedaBidireccional(node, objetive) {
  	  if (node == objetive) {
- 	    //controlNodos(node, closedNodes, openedNodes);
+ 	    controlNodos(node, closedNodes, openedNodes);
  	    nodosSolucion.push(retornarNodo(node));
- 	    buildJSONTree();
-	    //mostrarNodos(openedNodes, 'openedNodes');
-	    //mostrarNodos(closedNodes, 'closedNodes');
+	    mostrarNodos(openedNodes, 'openedNodes');
+	    mostrarNodos(closedNodes, 'closedNodes');
+	    buildJSONTree();
 	    return;
   	}
   	if (validar(objetive, visitedNodes) == true) {
   		nodosSolucion.push(retornarNodo(objetive));
-  		//controlNodos(objetive, closedNodes, openedNodes);
-	    //mostrarNodos(openedNodes, 'openedNodes');
-	    //mostrarNodos(closedNodes, 'closedNodes');
+  		controlNodos(objetive, closedNodes, openedNodes);
+	    mostrarNodos(openedNodes, 'openedNodes');
+	    mostrarNodos(closedNodes, 'closedNodes');
 	    return;
   	}
   	else {
-	    //controlNodos(recorridoAdelante(node), openedNodes, closedNodes); controlNodos(recorridoAtrás(objetive), openedNodes, closedNodes);
+	    controlNodos(recorridoAdelante(node), openedNodes, closedNodes); controlNodos(recorridoAtrás(objetive), openedNodes, closedNodes);
 	    console.log("Abriendo: " + recorridoAdelante(node) + ", " + recorridoAtrás(objetive));
-	    //controlNodos(node, closedNodes, openedNodes); controlNodos(objetive, closedNodes, openedNodes);
+	    controlNodos(node, closedNodes, openedNodes); controlNodos(objetive, closedNodes, openedNodes);
 	    console.log("Cerrando: " + node + ", " + objetive);
 	    nodosSolucion.push(retornarNodo(node)); nodosSolucion.push(retornarNodo(objetive));
 	    llenarListaNodosBi(node, visitedNodes);
@@ -648,6 +648,14 @@ function aAs(){
 	busquedaAstar(nodes[0].text, nodes[nodes.length - 1].text);
 }
 
+function limpiar(array){
+	for (var i = 0; i < array.length; i++) {
+		if (array[i] == undefined) {
+			array.splice(i, 1);
+		}
+	}
+}
+
 var abiertosAstar = []; var cerradosAstar = [];
 var cost; var cantidadNodos;
 
@@ -673,7 +681,7 @@ function busquedaAstar(node, objetive){
 		recorridoAnchura(node);
 		if (arcos.length != 0) {
 			for (var i = 0; i < arcos.length; i++) {
-				//controlNodosAstar	(arcos[i].para, openedNodes, openedNodes);
+				controlNodosAstar	(arcos[i].para, openedNodes, openedNodes);
 				//openedNodes.push(arcos[i].para);
 				arcosSolucion.push(arcos[i]);
 				console.log("Nodo " + arcos[i].para);
@@ -691,7 +699,7 @@ function busquedaAstar(node, objetive){
 					cerradosAstar = [];
 				}
 			}
-			//controlNodos(menor, closedNodes, openedNodes);
+			controlNodos(menor, closedNodes, openedNodes);
 			//closedNodes.push(menor);
 			nodosSolucion.push(retornarNodo(menor));
 		}
@@ -725,7 +733,7 @@ function heurísticaAstar(node, coste, objetive, limit){
 	    return cost;
   	}
 	if (validar(recorridoAdelante(node), cerradosAstar) != true) {
-		//controlNodosAstar(node, abiertosAstar, cerradosAstar);
+		controlNodosAstar(node, abiertosAstar, cerradosAstar);
 		cantidadNodos++;
 		console.log("Abriendo: " + recorridoAdelante(node));
 		cost + heurísticaAstar(recorridoAdelante(node), coste, objetive, limit - 1);
@@ -773,14 +781,14 @@ function recorridoAnchura(node){
 	    }
 	}
 }
-/*
+
 function mostrarNodos(array, htmlE) {
   	var message = "";
   	for (var i = 0; i < array.length; i++) {
     	message = message + array[i] + " ";
     	document.getElementById(htmlE).innerHTML = message;
   	}
-}*/
+}
 
 function controlNodos(node, arrayOne, arrayTwo) {
   	var control = false;
