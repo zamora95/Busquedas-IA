@@ -1,7 +1,7 @@
 nodosAdyacentes = [];
 
-var nodosSolucion;
-var arcosSolucion;
+var nodosSolucion = [];
+var arcosSolucion = [];
 
 function getNodobyId(identifier) {
 	for (var i = 0; i < nodes.length; i++) {
