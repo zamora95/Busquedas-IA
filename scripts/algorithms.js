@@ -506,7 +506,6 @@ function simulatedAnnealing(root, goal){
 		        var randomNeighbour = Math.floor(Math.random() * 10) + 1;
 		        
 		        if (nodosAdyacentes[i] == goal) {
-			    	console.log("ENTRE ALSDKFALSDFJLAS");
 				    buildJSONTree();
 				    return;
 				}
@@ -527,10 +526,13 @@ function simulatedAnnealing(root, goal){
 
 	    
 	      	}
-	      	var arco = getArco(nodeIndex,nodeMin);
-			arcosSolucion.push(arco);
-	      	stack.push(nodeMin);
-	      	nodosSolucion.push(nodeMin);
+	      	if(nodeTemp != null){
+	      		var arco = getArco(nodeIndex,nodeMin);
+				arcosSolucion.push(arco);
+		      	stack.push(nodeMin);
+		      	nodosSolucion.push(nodeMin);
+	      	}
+	      
 	    }  
 	}
 
