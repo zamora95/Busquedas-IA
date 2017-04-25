@@ -639,26 +639,36 @@ function busquedaBidireccional(node, objetive) {
 }
 
 function dls(){
+	t0 = performance.now();
 	nodosSolucion = [];
 	arcosSolucion = [];
 	size = nodes.length - 1;
 	busquedaDls(nodes[0].text, nodes[nodes.length - 1].text, size);
+	t1 = performance.now();
+	alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
 }
 
 function bi(){
+	t0 = performance.now();
 	nodosSolucion = [];
 	arcosSolucion = [];
     closedNodes = []; openedNodes = [];
   	busquedaBidireccional(nodes[0].text, nodes[nodes.length - 1].text);
+  	t1 = performance.now();
+	alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
+
 }
 
 function aAs(){
+	t0 = performance.now();
 	nodosSolucion = [];
 	arcosSolucion = [];
   	closedNodes = [];
 	closedNodes.push(nodes[0].text);
 	//controlNodos(nodes[0].text, closedNodes, openedNodes);
 	busquedaAstar(nodes[0].text, nodes[nodes.length - 1].text);
+	t1 = performance.now();
+	alert("Tiempo de búsqueda: " + (t1 - t0) + " milisegundos.");
 }
 
 function limpiar(array){
