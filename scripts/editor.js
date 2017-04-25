@@ -252,6 +252,7 @@ function loadData(){
     nodeInfo.identifier = dataJson.nodeDataArray[i].id;
     nodeInfo.text = dataJson.nodeDataArray[i].text;
     nodeInfo.cost = 0;
+    nodeInfo.visited = false;
     nodes.push(nodeInfo);
   }
   /*var commentNodes = "";

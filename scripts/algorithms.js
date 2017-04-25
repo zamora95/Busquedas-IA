@@ -77,7 +77,7 @@ root:initial state
 goal:final state
 */
 function dfs(root, goal){
-  
+  console.log(root);
   var stack = [root];
   nodes[0].visited = true;
   while (stack.length > 0){
